@@ -1,0 +1,188 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    
+    /* Angkasa Pura / InJourney Palette */
+    --color-aviation-950: #003366; /* Deep Corporate Blue */
+    --color-aviation-900: #0054A6; /* Primary AP Blue */
+    --color-aviation-800: #0077c8; /* Light AP Blue */
+    --color-aviation-accent: #0054A6;
+    --color-aviation-success: #79B933; /* Primary AP Green */
+    --color-aviation-warning: #f59e0b;
+    --color-aviation-danger: #ef4444;
+    
+    --shadow-hologram: 0 10px 40px rgba(0, 84, 166, 0.1), 0 0 20px rgba(121, 185, 51, 0.05);
+    --shadow-inner-glow: inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+@layer base {
+    body {
+        @apply bg-[#F1F5F9] text-slate-800 antialiased selection:bg-aviation-900 selection:text-white;
+    }
+}
+
+@layer components {
+    .radar-grid {
+        background-image: 
+            linear-gradient(rgba(0, 84, 166, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 84, 166, 0.03) 1px, transparent 1px);
+        background-size: 50px 50px;
+        @apply relative overflow-hidden;
+    }
+
+    .radar-ping {
+        @apply absolute w-[3px] h-full bg-gradient-to-b from-transparent via-aviation-900/10 to-transparent;
+        animation: radar-sweep 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    .glass-hud {
+        @apply bg-white/70 backdrop-blur-2xl border border-white/40 shadow-sm shadow-aviation-900/5;
+    }
+    
+    .glass-hud-accent {
+        @apply bg-white border border-aviation-900/10 shadow-hologram;
+    }
+
+    .card-instrument {
+        @apply bg-white rounded-[2rem] border border-slate-200 hover:border-aviation-900/30 transition-all duration-500 hover:shadow-hologram relative overflow-hidden;
+    }
+
+    .btn-hud {
+        @apply px-7 py-3.5 rounded-2xl font-bold tracking-wider uppercase text-xs flex items-center justify-center gap-3 transition-all duration-300 active:scale-95 cursor-pointer;
+    }
+    
+    .btn-hud-primary {
+        @apply bg-aviation-900 text-white shadow-xl shadow-aviation-900/20 hover:bg-aviation-950 hover:-translate-y-0.5;
+    }
+    
+    .btn-hud-secondary {
+        @apply bg-aviation-success text-white shadow-xl shadow-aviation-success/20 hover:opacity-90 hover:-translate-y-0.5;
+    }
+    
+    .btn-hud-outline {
+        @apply border-2 border-slate-200 text-slate-500 hover:border-aviation-900 hover:text-aviation-900 hover:bg-aviation-900/5;
+    }
+
+    .nav-instrument {
+        @apply flex items-center gap-4 px-6 py-4 rounded-2xl text-slate-400 hover:text-aviation-900 hover:bg-aviation-900/5 transition-all duration-300 relative font-bold;
+    }
+    
+    .nav-instrument-active {
+        @apply text-aviation-900 bg-white border border-slate-200 shadow-hologram;
+    }
+    
+    .nav-instrument-active::before {
+        content: '';
+        @apply absolute left-2 w-1.5 h-6 bg-aviation-900 rounded-full shadow-[0_0_10px_rgba(0,84,166,0.3)];
+    }
+
+    /* Standardized Light HUD Table */
+    .table-hud {
+        @apply w-full border-collapse overflow-hidden;
+    }
+    
+    .table-hud thead th {
+        @apply px-6 py-5 bg-slate-50 text-left text-[11px] font-black text-aviation-900 uppercase tracking-[0.2em] border-b border-slate-200;
+    }
+    
+    .table-hud tbody tr {
+        @apply transition-all duration-200 border-b border-slate-100;
+    }
+    
+    .table-hud tbody tr:hover {
+        @apply bg-slate-50/80;
+    }
+    
+    .table-hud tbody td {
+        @apply px-6 py-5 text-sm font-semibold text-slate-700;
+    }
+
+    .table-hud-bordered {
+        @apply border border-slate-200;
+    }
+    
+    .table-hud-bordered td, .table-hud-bordered th {
+        @apply border border-slate-100;
+    }
+
+    /* Custom DataTables Styling (AP Light Overrides) */
+    .dataTables_wrapper .dataTables_length select,
+    .dataTables_wrapper .dataTables_filter input {
+        @apply bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-aviation-900 focus:ring-4 focus:ring-aviation-900/10 transition-all;
+    }
+    
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        @apply mt-6 text-[11px] font-black uppercase tracking-widest text-slate-400;
+    }
+    
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        @apply !bg-transparent !border-0 !text-slate-400 hover:!text-aviation-900 transition-colors cursor-pointer;
+    }
+    
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        @apply !bg-aviation-900 !text-white !rounded-lg !px-4 font-bold shadow-lg shadow-aviation-900/20;
+    }
+
+    /* Standardized Form HUD (Light Mode) */
+    .form-hud-group {
+        @apply space-y-4 mb-8;
+    }
+
+    .form-hud-label {
+        @apply block text-[11px] font-black text-aviation-900 uppercase tracking-[0.2em] mb-2.5;
+    }
+
+    .form-hud-input, .form-hud-select, .form-hud-textarea {
+        @apply w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl text-sm font-semibold text-slate-800 focus:outline-none focus:border-aviation-900 focus:ring-4 focus:ring-aviation-900/10 transition-all duration-300 placeholder:text-slate-300 placeholder:font-normal;
+    }
+
+    .form-hud-input:invalid:not(:placeholder-shown) {
+        @apply border-aviation-danger/50 text-aviation-danger bg-rose-50/10;
+    }
+
+    .box-footer-hud {
+        @apply pt-8 border-t border-slate-100 flex items-center justify-end gap-4;
+    }
+}
+
+@keyframes radar-sweep {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(800%); }
+}
+
+@keyframes pulse-glow {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.02); }
+}
+
+.animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+
+/* Custom Scrollbar AP Style */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-slate-100;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full hover:bg-aviation-900 transition-colors;
+}
+
+/* Gradient text utility (AP Blue to Green) */
+.text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-aviation-900 to-aviation-success;
+}
+
+.bg-brand-gradient {
+    @apply bg-gradient-to-br from-aviation-900 to-aviation-950;
+}
