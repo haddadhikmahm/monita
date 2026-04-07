@@ -1,30 +1,26 @@
 @extends('layouts.app')
 
-@section('title', 'List Inspeksi - Monita HUD')
-@section('header', 'Riwayat Protokol Inspeksi')
+@section('title', 'Maintenance Log - Monita HUD')
+@section('header', 'Maintenance surveillance Terminal')
 
 @section('content')
 <div class="card-instrument fade-up">
     <!-- HUD Header with Strategic Summary -->
     <div class="p-8 border-b border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-2xl bg-aviation-900/10 flex items-center justify-center border border-aviation-900/20">
-                <i data-lucide="clipboard-list" class="w-6 h-6 text-aviation-900"></i>
+            <div class="w-12 h-12 rounded-2xl bg-rose-500/10 flex items-center justify-center border border-rose-500/20">
+                <i data-lucide="wrench" class="w-6 h-6 text-rose-500"></i>
             </div>
             <div>
-                <h3 class="font-black text-lg text-slate-800 tracking-widest uppercase">Archive Log Inspeksi</h3>
-                <p class="text-[9px] font-bold text-aviation-900 uppercase tracking-[0.3em]">Historical Surveillance Records</p>
+                <h3 class="font-black text-lg text-slate-800 tracking-widest uppercase">Maintenance Queue</h3>
+                <p class="text-[9px] font-bold text-rose-500 uppercase tracking-[0.3em]">Critical Equipment Restoration Log</p>
             </div>
         </div>
-        <a href="{{ route('inspeksi.create') }}" class="btn-hud btn-hud-primary">
-            <i data-lucide="plus-circle" class="w-4 h-4"></i>
-            <span>Entry Inspeksi Baru</span>
-        </a>
     </div>
 
     <!-- Advanced Logic Filter Console -->
     <div class="p-8 bg-slate-50/50 border-b border-slate-100">
-        <form action="{{ route('inspeksi.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <form action="{{ route('maintenance.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="form-hud-group mb-0">
                 <label class="form-hud-label !text-[8px]">Time Horizon</label>
                 <select name="period" class="form-hud-select !py-2 !text-xs">
@@ -48,12 +44,11 @@
                     <i data-lucide="filter" class="w-3.5 h-3.5"></i>
                     <span>Execute Filter</span>
                 </button>
-                <a href="{{ route('inspeksi.index') }}" class="btn-hud btn-hud-outline !py-2 !h-10">
+                <a href="{{ route('maintenance.index') }}" class="btn-hud btn-hud-outline !py-2 !h-10">
                     <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
                 </a>
             </div>
 
-            <!-- Second Row Filters -->
             <div class="form-hud-group mb-0">
                 <label class="form-hud-label !text-[8px]">Asset Category</label>
                 <select name="kategori_id" class="form-hud-select !py-2 !text-xs" onchange="this.form.submit()">
@@ -86,44 +81,55 @@
 
     <!-- HUD Table Content -->
     <div class="p-8 overflow-x-auto">
-        <table id="inspeksiHudTable" class="table-hud table-hud-bordered">
+        <table id="maintenanceHudTable" class="table-hud table-hud-bordered">
             <thead>
                 <tr>
-                    <th width="15%">REF_ID [HEX]</th>
-                    <th>Timestamp Data</th>
+                    <th width="5%">No</th>
+                    <th>Nama Alat</th>
                     <th>Node Lokasi</th>
-                    <th>Operator Unit I</th>
-                    <th>Kondisi Atmosfer</th>
-                    <th width="15%">Aksi Protokol</th>
+                    <th width="25%">Keterangan Kerusakan</th>
+                    <th>Visual Documentation</th>
+                    <th>Reported At</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($inspeksis as $i)
+                @foreach($maintenanceItems as $item)
                 <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100">
-                    <td class="font-mono text-aviation-900 text-xs">#{{ str_pad($i->id, 6, '0', STR_PAD_LEFT) }}</td>
+                    <td class="text-center font-mono text-[10px] text-slate-400">{{ $loop->iteration }}</td>
                     <td class="font-bold text-slate-800 tracking-wide text-xs">
-                        {{ $i->tanggal->format('d/m/Y') }} <span class="text-slate-400 font-normal ml-2">[{{ $i->hari }}]</span>
-                    </td>
-                    <td>
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-aviation-900"></i>
-                            <span class="text-sm font-semibold">{{ $i->lokasi->nama }}</span>
-                        </div>
-                    </td>
-                    <td class="font-bold text-slate-600 text-sm">{{ $i->petugas1->name }}</td>
-                    <td>
-                        <span class="px-2 py-1 rounded bg-sky-500/10 text-sky-600 text-[10px] font-black uppercase tracking-widest border border-sky-500/20">
-                            {{ $i->cuaca }}
+                        {{ $item->masterData->nama }}
+                        <span class="block text-[8px] text-slate-400 uppercase tracking-widest mt-1">
+                            {{ $item->masterData->kategori->nama }}
                         </span>
                     </td>
                     <td>
                         <div class="flex items-center gap-2">
-                            <a href="{{ route('inspeksi.show', $i->id) }}" class="p-2 rounded-xl bg-aviation-900/10 text-aviation-900 border border-aviation-900/20 hover:bg-aviation-900 hover:text-white transition-all shadow-lg hover:shadow-aviation-900/20" title="Detail">
-                                <i data-lucide="eye" class="w-4 h-4"></i>
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-aviation-900"></i>
+                            <span class="text-sm font-semibold">{{ $item->inspeksi->lokasi->nama }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <p class="text-xs font-semibold text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-100">
+                            {{ $item->keterangan ?? 'No specific description provided.' }}
+                        </p>
+                    </td>
+                    <td>
+                        @if($item->foto)
+                            <a href="{{ asset('images/kondisi/' . $item->foto) }}" target="_blank" class="block w-20 h-12 rounded-xl overflow-hidden border border-slate-200 group">
+                                <img src="{{ asset('images/kondisi/' . $item->foto) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform" alt="Documentation">
                             </a>
-                            <a href="{{ route('inspeksi.pdf', $i->id) }}" class="p-2 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20 hover:bg-rose-500 hover:text-white transition-all shadow-lg hover:shadow-rose-500/20" target="_blank" title="Download PDF">
-                                <i data-lucide="printer" class="w-4 h-4"></i>
-                            </a>
+                        @else
+                            <div class="w-20 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[8px] font-black uppercase text-slate-300">
+                                No Foto
+                            </div>
+                        @endif
+                    </td>
+                    <td>
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-slate-800">{{ $item->inspeksi->tanggal->format('d/m/Y') }}</span>
+                            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">
+                                {{ $item->created_at->format('H:i') }} hrs
+                            </span>
                         </div>
                     </td>
                 </tr>
@@ -137,11 +143,11 @@
 @section('js')
 <script>
     $(function () {
-        $('#inspeksiHudTable').DataTable({
-            "order": [[1, "desc"]],
+        $('#maintenanceHudTable').DataTable({
+            "order": [[0, "asc"]],
             "language": {
                 "search": "_INPUT_",
-                "searchPlaceholder": "Search Log Archives...",
+                "searchPlaceholder": "Search Maintenance Log...",
                 "lengthMenu": "Display _MENU_ Records",
             },
             "drawCallback": function() {

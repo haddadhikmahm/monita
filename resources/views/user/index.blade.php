@@ -32,7 +32,7 @@
                     Admin
                 </a>
             </div>
-            <a href="#" class="btn-hud btn-hud-primary bg-rose-600 hover:bg-rose-700 shadow-rose-600/20">
+            <a href="{{ route('user.create') }}" class="btn-hud btn-hud-primary bg-rose-600 hover:bg-rose-700 shadow-rose-600/20">
                 <i data-lucide="user-plus" class="w-4 h-4"></i>
                 <span>Enlist New Unit</span>
             </a>
@@ -73,7 +73,7 @@
                     </td>
                     <td>
                         <div class="flex items-center gap-2">
-                            <a href="#" class="p-2 rounded-xl bg-aviation-accent/10 text-aviation-accent border border-aviation-accent/20 hover:bg-aviation-accent hover:text-white transition-all shadow-lg hover:shadow-aviation-accent/20" title="Edit">
+                            <a href="{{ route('user.edit', $u->id) }}" class="p-2 rounded-xl bg-aviation-accent/10 text-aviation-accent border border-aviation-accent/20 hover:bg-aviation-accent hover:text-white transition-all shadow-lg hover:shadow-aviation-accent/20" title="Edit">
                                 <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
                             </a>
                             <form action="{{ route('user.destroy', $u->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?')">

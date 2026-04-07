@@ -4,7 +4,6 @@
 @section('header', 'Protokol Modifikasi Unit')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
     <div class="card-instrument fade-up">
         <div class="p-8 border-b border-slate-100 flex items-center gap-4">
             <div class="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center border border-amber-500/20">
@@ -75,5 +74,5 @@
             </div>
         </form>
     </div>
-</div>
+
 @endsection

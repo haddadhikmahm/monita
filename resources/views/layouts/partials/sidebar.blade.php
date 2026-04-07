@@ -51,6 +51,11 @@
             <i data-lucide="clipboard-list" class="w-5 h-5"></i>
             <span x-show="sidebarOpen" class="tracking-widest uppercase text-[10px] font-black">Laporan Inspeksi</span>
         </a>
+
+        <a href="{{ route('maintenance.index') }}" class="nav-instrument {{ Request::is('maintenance*') ? 'nav-instrument-active' : '' }} group">
+            <i data-lucide="wrench" class="w-5 h-5"></i>
+            <span x-show="sidebarOpen" class="tracking-widest uppercase text-[10px] font-black">Maintenance Log</span>
+        </a>
     </div>
 
     <!-- Administrative Protocol -->

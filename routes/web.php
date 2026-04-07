@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DataInspeksiController;
 use App\Http\Controllers\InspeksiController;
 use App\Http\Controllers\KategoriInspeksiController;
 use App\Http\Controllers\LokasiInspeksiController;
@@ -31,7 +30,18 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('user', UserController::class);
 
     // Inspeksi
+    Route::post('inspeksi/start', [InspeksiController::class, 'start'])->name('inspeksi.start');
+    Route::get('inspeksi/category/{kategori_id}', [InspeksiController::class, 'categoryForm'])->name('inspeksi.category');
+    Route::post('inspeksi/category/{kategori_id}', [InspeksiController::class, 'saveCategory'])->name('inspeksi.save_category');
+    Route::post('inspeksi/finish', [InspeksiController::class, 'finish'])->name('inspeksi.finish');
     Route::resource('inspeksi', InspeksiController::class);
     Route::get('inspeksi/{id}/pdf', [\App\Http\Controllers\ReportController::class, 'downloadPdf'])->name('inspeksi.pdf');
-    Route::get('report/rekap', [\App\Http\Controllers\ReportController::class, 'rekap'])->name('report.rekap');
+
+    // Maintenance
+    Route::get('/maintenance', [App\Http\Controllers\MaintenanceController::class, 'index'])->name('maintenance.index');
+
+    // Profile Management
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 });
+

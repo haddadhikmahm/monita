@@ -117,11 +117,30 @@
     .dataTables_wrapper .dataTables_filter input {
         @apply bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-aviation-900 focus:ring-4 focus:ring-aviation-900/10 transition-all;
     }
-    
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        @apply mb-10 text-[11px] font-black uppercase tracking-widest text-slate-400 !border-0;
+        float: none !important;
+        display: inline-block !important;
+        width: 50% !important;
+    }
+
+    .dataTables_wrapper .dataTables_filter {
+        @apply text-right;
+    }
+
+    .dataTables_wrapper table.dataTable {
+        @apply !mt-10 mb-8;
+        clear: both !important;
+    }
+
     .dataTables_wrapper .dataTables_info,
     .dataTables_wrapper .dataTables_paginate {
-        @apply mt-6 text-[11px] font-black uppercase tracking-widest text-slate-400;
+        @apply mt-10 text-[11px] font-black uppercase tracking-widest text-slate-400;
     }
+
+
     
     .dataTables_wrapper .dataTables_paginate .paginate_button {
         @apply !bg-transparent !border-0 !text-slate-400 hover:!text-aviation-900 transition-colors cursor-pointer;

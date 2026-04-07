@@ -115,7 +115,7 @@
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
         
         <!-- Condition Chart HUD -->
-        <div class="xl:col-span-2 card-instrument p-10 bg-white">
+        <div class="xl:col-span-3 card-instrument p-10 bg-white">
             <div class="flex items-center justify-between mb-10">
                 <div class="flex items-center gap-4">
                     <div class="w-2 h-8 bg-aviation-900 rounded-full"></div>
@@ -137,63 +137,6 @@
                 <canvas id="conditionChart"></canvas>
             </div>
         </div>
-
-        <!-- System Log HUD -->
-        <div class="card-instrument bg-slate-50 overflow-hidden border-2 border-slate-200/40">
-            <div class="p-8 border-b border-slate-200 bg-white flex items-center justify-between">
-                <div>
-                    <h3 class="text-sm font-black text-aviation-900 uppercase tracking-widest">Protocol Stats</h3>
-                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Data Summary</p>
-                </div>
-                <i data-lucide="info" class="w-4 h-4 text-slate-400"></i>
-            </div>
-            <div class="p-8 space-y-8">
-                <div class="space-y-6">
-                    <!-- Stat 01 -->
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-aviation-900/5 flex items-center justify-center border border-aviation-900/10">
-                                <i data-lucide="cpu" class="w-5 h-5 text-aviation-900"></i>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Database Size</p>
-                                <p class="text-xs font-black text-aviation-900 mt-1">128.4 MB / 1 GB</p>
-                            </div>
-                        </div>
-                        <span class="text-[10px] font-mono text-aviation-900 font-bold">12%</span>
-                    </div>
-
-                    <!-- Stat 02 -->
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-aviation-success/5 flex items-center justify-center border border-aviation-success/10">
-                                <i data-lucide="wifi" class="w-5 h-5 text-aviation-success"></i>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Bandwidth Usage</p>
-                                <p class="text-xs font-black text-aviation-success mt-1">2.4 Gbps</p>
-                            </div>
-                        </div>
-                        <span class="text-[10px] font-mono text-aviation-success font-bold">Optimal</span>
-                    </div>
-
-                    <!-- Stat 03 -->
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-amber-500/5 flex items-center justify-center border border-amber-500/10">
-                                <i data-lucide="refresh-cw" class="w-5 h-5 text-amber-500"></i>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Auto Sync Rate</p>
-                                <p class="text-xs font-black text-amber-500 mt-1">5m Interval</p>
-                            </div>
-                        </div>
-                        <i data-lucide="check-circle" class="w-4 h-4 text-aviation-success"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 @endsection
 
