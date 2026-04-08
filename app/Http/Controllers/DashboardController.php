@@ -42,6 +42,22 @@ class DashboardController extends Controller
             elseif ($detail->kondisi_struktur == 'Rusak Berat') $berat = $detail->total;
         }
 
+        // New Chart Data: Equipment per Category
+        $categories = \App\Models\KategoriInspeksi::withCount('masterDatas')->get();
+        
+        // New Chart Data: Equipment per Location
+        $locations = \App\Models\LokasiInspeksi::withCount('masterDatas')->take(10)->get();
+
+        // New Chart Data: Monthly Inspection Trends (Last 6 months)
+        $monthlyTrends = Inspeksi::select(
+                DB::raw('MONTHNAME(created_at) as month'), 
+                DB::raw('count(*) as total')
+            )
+            ->where('created_at', '>=', now()->subMonths(6))
+            ->groupBy('month', DB::raw('MONTH(created_at)'))
+            ->orderBy(DB::raw('MONTH(created_at)'))
+            ->get();
+
         return view('dashboard', compact(
             'countData', 
             'countLokasi', 
@@ -49,7 +65,10 @@ class DashboardController extends Controller
             'countInspeksi', 
             'baik', 
             'ringan', 
-            'berat'
+            'berat',
+            'categories',
+            'locations',
+            'monthlyTrends'
         ));
     }
 }

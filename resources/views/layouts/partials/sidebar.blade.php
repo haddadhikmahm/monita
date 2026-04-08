@@ -1,8 +1,11 @@
 <!-- Sidebar Header: Brand Identity -->
 <div class="h-24 px-8 flex items-center gap-4 bg-brand-gradient shadow-2xl relative overflow-hidden group">
     <div class="radar-ping"></div> <!-- Subtle Brand Ping -->
-    <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shrink-0 shadow-lg relative z-10">
-        <i data-lucide="plane-takeoff" class="w-7 h-7 text-aviation-900 group-hover:rotate-12 transition-transform duration-500"></i>
+    <div :class="!sidebarOpen ? 'w-10 h-10 rounded-xl -ml-1' : 'w-12 h-12 rounded-2xl'"
+         class="bg-white flex items-center justify-center shrink-0 shadow-lg relative z-10 transition-all duration-500">
+        <i data-lucide="plane-takeoff" 
+           :class="!sidebarOpen ? 'w-5 h-5' : 'w-7 h-7'"
+           class="text-aviation-900 group-hover:rotate-12 transition-all duration-500"></i>
     </div>
     <div class="flex flex-col relative z-10" x-show="sidebarOpen">
         <h1 class="text-white font-black text-xs tracking-[.4em] uppercase leading-none">Angkasa Pura</h1>

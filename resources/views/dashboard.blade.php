@@ -10,7 +10,7 @@
     <div class="card-instrument p-10 bg-brand-gradient text-white flex flex-col xl:flex-row items-center justify-between gap-10 shadow-2xl shadow-aviation-900/40 relative overflow-hidden group">
         <div class="radar-ping"></div> <!-- Brand Pulse -->
         <div class="relative z-10 flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
-            <div class="w-24 h-24 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center animate-float shadow-2xl group-hover:rotate-6 transition-transform">
+            <div class="w-24 h-24 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center shadow-2xl transition-transform">
                 <i data-lucide="tower-control" class="w-12 h-12 text-aviation-success"></i>
             </div>
             <div>
@@ -111,50 +111,109 @@
         </div>
     </div>
 
-    <!-- Official Tactical View: Condition Analysis -->
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+    <!-- Official Tactical View: Analytics Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
-        <!-- Condition Chart HUD -->
-        <div class="xl:col-span-3 card-instrument p-10 bg-white">
-            <div class="flex items-center justify-between mb-10">
-                <div class="flex items-center gap-4">
-                    <div class="w-2 h-8 bg-aviation-900 rounded-full"></div>
-                    <div>
-                        <h3 class="text-lg font-black text-slate-800 uppercase tracking-widest leading-none">Analisis Kelayakan Alat</h3>
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[.3em] mt-2 leading-none">Condition Monitoring Metrics</p>
-                    </div>
-                </div>
+        <!-- Chart 01: Condition Doughnut -->
+        <div class="card-instrument p-8 bg-white flex flex-col h-[500px]">
+            <div class="flex items-center justify-between mb-8">
                 <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
-                        <span class="w-2 h-2 rounded-full bg-aviation-900"></span>
-                        <span class="text-[9px] font-black uppercase text-slate-500">Live Telemetry</span>
+                    <div class="w-1.5 h-6 bg-aviation-success rounded-full"></div>
+                    <div>
+                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest leading-none">Condition Registry</h3>
+                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-[.3em] mt-1.5">Asset Health Metrics</p>
                     </div>
                 </div>
             </div>
-            
-            <div class="relative h-[400px] flex items-center justify-center">
-                <!-- Instrument Chart Render -->
+            <div class="relative flex-1 flex items-center justify-center p-4">
                 <canvas id="conditionChart"></canvas>
             </div>
         </div>
+
+        <!-- Chart 02: Category Distribution (Bar) -->
+        <div class="card-instrument p-8 bg-white flex flex-col h-[500px]">
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center gap-3">
+                    <div class="w-1.5 h-6 bg-aviation-900 rounded-full"></div>
+                    <div>
+                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest leading-none">Category Distribution</h3>
+                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-[.3em] mt-1.5">Asset Classification</p>
+                    </div>
+                </div>
+            </div>
+            <div class="relative flex-1 p-4">
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 03: Activity Trend (Line) -->
+        <div class="card-instrument p-8 bg-white flex flex-col h-[500px]">
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center gap-3">
+                    <div class="w-1.5 h-6 bg-amber-500 rounded-full"></div>
+                    <div>
+                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest leading-none">Operational Activity</h3>
+                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-[.3em] mt-1.5">Monthly Inspection Trends</p>
+                    </div>
+                </div>
+            </div>
+            <div class="relative flex-1 p-4">
+                <canvas id="activityChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 04: Location Density (Horizontal Bar) -->
+        <div class="card-instrument p-8 bg-white flex flex-col h-[500px]">
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center gap-3">
+                    <div class="w-1.5 h-6 bg-rose-500 rounded-full"></div>
+                    <div>
+                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest leading-none">Location Density</h3>
+                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-[.3em] mt-1.5">Node Deployment Analysis</p>
+                    </div>
+                </div>
+            </div>
+            <div class="relative flex-1 p-4">
+                <canvas id="locationChart"></canvas>
+            </div>
+        </div>
+
+    </div>
 </div>
 @endsection
 
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('conditionChart').getContext('2d');
-    
     // Official AP Branding Palette
     const brandColors = {
         blue: '#0054A6',
         green: '#79B933',
         teal: '#00A19D',
         orange: '#F39200',
-        coral: '#E95D5D'
+        coral: '#E95D5D',
+        slate: '#64748b'
     };
 
-    new Chart(ctx, {
+    const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    padding: 20,
+                    usePointStyle: true,
+                    pointStyle: 'rectRounded',
+                    font: { family: '"Instrument Sans"', size: 10, weight: 'bold' },
+                    color: brandColors.slate
+                }
+            }
+        }
+    };
+
+    // 1. Condition Doughnut
+    new Chart(document.getElementById('conditionChart'), {
         type: 'doughnut',
         data: {
             labels: ['Baik', 'Rusak Ringan', 'Rusak Berat'],
@@ -162,35 +221,87 @@
                 data: [{{ $baik }}, {{ $ringan }}, {{ $berat }}],
                 backgroundColor: [brandColors.green, brandColors.orange, brandColors.coral],
                 borderColor: '#ffffff',
-                borderWidth: 10,
-                hoverOffset: 20,
-                spacing: 8
+                borderWidth: 8,
+                spacing: 5
             }]
         },
         options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '80%',
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 30,
-                        usePointStyle: true,
-                        pointStyle: 'rectRounded',
-                        font: {
-                            family: '"Instrument Sans"',
-                            size: 11,
-                            weight: 'bold'
-                        },
-                        color: '#64748b'
-                    }
-                }
+            ...commonOptions,
+            cutout: '75%'
+        }
+    });
+
+    // 2. Category Bar Chart
+    new Chart(document.getElementById('categoryChart'), {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($categories->pluck('nama')) !!},
+            datasets: [{
+                label: 'Total Equipment',
+                data: {!! json_encode($categories->pluck('master_datas_count')) !!},
+                backgroundColor: brandColors.blue,
+                borderRadius: 8,
+                barThickness: 20
+            }]
+        },
+        options: {
+            ...commonOptions,
+            scales: {
+                y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 9 } } },
+                x: { grid: { display: false }, ticks: { font: { size: 9 } } }
             }
         }
     });
 
-    // Re-init lucide icons for dynamic items
+    // 3. Activity Line Chart
+    new Chart(document.getElementById('activityChart'), {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($monthlyTrends->pluck('month')) !!},
+            datasets: [{
+                label: 'Inspections',
+                data: {!! json_encode($monthlyTrends->pluck('total')) !!},
+                borderColor: brandColors.green,
+                backgroundColor: brandColors.green + '20',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+                pointRadius: 4,
+                pointBackgroundColor: '#fff'
+            }]
+        },
+        options: {
+            ...commonOptions,
+            scales: {
+                y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 9 } } },
+                x: { grid: { display: false }, ticks: { font: { size: 9 } } }
+            }
+        }
+    });
+
+    // 4. Location Horizontal Bar
+    new Chart(document.getElementById('locationChart'), {
+        type: 'bar',
+        indexAxis: 'y',
+        data: {
+            labels: {!! json_encode($locations->pluck('nama')) !!},
+            datasets: [{
+                label: 'Deployment Count',
+                data: {!! json_encode($locations->pluck('master_datas_count')) !!},
+                backgroundColor: brandColors.blue,
+                borderRadius: 6,
+                barThickness: 15
+            }]
+        },
+        options: {
+            ...commonOptions,
+            scales: {
+                x: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 9 } } },
+                y: { grid: { display: false }, ticks: { font: { size: 9 } } }
+            }
+        }
+    });
+
     lucide.createIcons();
 </script>
 @endsection
