@@ -102,7 +102,6 @@ class InspeksiController extends Controller
     public function start(Request $request)
     {
         $request->validate([
-            'hari' => 'required',
             'tanggal' => 'required|date',
             'lokasi_id' => 'required',
             'petugas1_id' => 'required',
@@ -110,9 +109,22 @@ class InspeksiController extends Controller
 
         $inspeksiId = 'IDI' . rand(11111, 99999);
         
+        $translatedDays = [
+            'Sunday' => 'Minggu',
+            'Monday' => 'Senin',
+            'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday' => 'Kamis',
+            'Friday' => 'Jumat',
+            'Saturday' => 'Sabtu',
+        ];
+
+        $dayName = Carbon::parse($request->tanggal)->format('l');
+        $hari = $translatedDays[$dayName];
+        
         Inspeksi::create([
             'id' => $inspeksiId,
-            'hari' => $request->hari,
+            'hari' => $hari,
             'tanggal' => $request->tanggal,
             'cuaca' => $request->cuaca,
             'w1' => $request->has('w1') ? 'Y' : 'N',

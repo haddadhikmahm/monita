@@ -21,16 +21,6 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                 <div class="space-y-6">
                     <div class="form-hud-group">
-                        <label class="form-hud-label">Hari Operasional</label>
-                        <select name="hari" class="form-hud-select" required>
-                            <option value="">- Select Day -</option>
-                            @php $haris = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']; @endphp
-                            @foreach($haris as $h)
-                                <option value="{{ $h }}">{{ $h }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-hud-group">
                         <label class="form-hud-label">Tanggal Surveillance</label>
                         <input type="date" name="tanggal" class="form-hud-input" value="{{ date('Y-m-d') }}" required>
                     </div>
