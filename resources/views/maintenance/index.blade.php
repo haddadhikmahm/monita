@@ -16,6 +16,15 @@
                 <p class="text-[9px] font-bold text-rose-500 uppercase tracking-[0.3em]">Critical Equipment Restoration Log</p>
             </div>
         </div>
+
+        @if(Auth::user()->role == 'admin' || Auth::user()->role == 'pimpinan')
+            <div class="flex items-center gap-4">
+                <div class="px-6 py-3 bg-rose-50 border border-rose-100 rounded-2xl flex flex-col items-end">
+                    <span class="text-[8px] font-black text-rose-400 uppercase tracking-widest leading-none mb-1.5">Critical Backlog</span>
+                    <span class="text-xl font-bold text-rose-600 tracking-tighter">{{ $maintenanceItems->count() }} ALAT</span>
+                </div>
+            </div>
+        @endif
     </div>
 
     <!-- Advanced Logic Filter Console -->

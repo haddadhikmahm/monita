@@ -50,6 +50,9 @@
                     </td>
                     <td>
                         <div class="flex items-center gap-3">
+                            <a href="{{ route('master-data.show', $d->id) }}" class="p-2 rounded-xl bg-aviation-900/10 text-aviation-900 border border-aviation-900/20 hover:bg-aviation-900 hover:text-white transition-all shadow-lg hover:shadow-aviation-900/20" title="View Status">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
+                            </a>
                             <a href="{{ route('master-data.edit', $d->id) }}" class="p-2 rounded-xl bg-aviation-accent/10 text-aviation-accent border border-aviation-accent/20 hover:bg-aviation-accent hover:text-white transition-all shadow-lg hover:shadow-aviation-accent/20" title="Edit Data">
                                 <i data-lucide="edit-3" class="w-4 h-4"></i>
                             </a>

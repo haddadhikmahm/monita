@@ -33,7 +33,7 @@
                     <tbody>
                         @foreach($alats as $index => $item)
                             @php $detail = $existingDetails->get($item->id); @endphp
-                            <tr class="border-b border-slate-50">
+                            <tr class="border-b border-slate-50" data-id="{{ $item->id }}">
                                 <td class="text-center font-mono text-[10px] text-slate-400">{{ $loop->iteration }}</td>
                                 <td class="font-bold text-slate-800 text-sm">{{ $item->nama }}</td>
                                 <td>
@@ -115,6 +115,19 @@
 
         $('.condition-radio').on('change', checkValidation);
         checkValidation(); // Initial call
+
+        // Highlight Logic
+        const urlParams = new URLSearchParams(window.location.search);
+        const highlightId = urlParams.get('highlight');
+        if (highlightId) {
+            const row = $(`tr[data-id="${highlightId}"]`);
+            if (row.length) {
+                row.addClass('bg-amber-50 ring-2 ring-amber-500/20');
+                $('html, body').animate({
+                    scrollTop: row.offset().top - 150
+                }, 1000);
+            }
+        }
 
         $('form').on('submit', function(e) {
             let allValid = true;

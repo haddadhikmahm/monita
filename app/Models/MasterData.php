@@ -30,4 +30,9 @@ class MasterData extends Model
     {
         return $this->hasMany(InspeksiDetail::class, 'data_id');
     }
+
+    public function latestInspeksiDetail()
+    {
+        return $this->hasOne(InspeksiDetail::class, 'data_id')->latestOfMany();
+    }
 }

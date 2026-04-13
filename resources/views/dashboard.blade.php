@@ -23,6 +23,9 @@
             </div>
         </div>
         <div class="relative z-10 flex flex-wrap justify-center gap-4">
+            <button onclick="openScanner()" class="btn-hud bg-aviation-success text-white shadow-2xl hover:scale-105 border-none">
+                <i data-lucide="scan-line" class="w-4 h-4"></i> Scan QR Alat
+            </button>
             <a href="{{ route('inspeksi.index') }}" class="btn-hud bg-white text-aviation-900 shadow-2xl hover:scale-105">
                 <i data-lucide="radar" class="w-4 h-4"></i> Mulai Inspeksi
             </a>
@@ -31,6 +34,8 @@
             </a>
         </div>
     </div>
+
+    @include('layouts.partials.scanner')
 
     <!-- Official Statistic Instrument Clusters -->
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
@@ -303,5 +308,79 @@
     });
 
     lucide.createIcons();
+
+    let html5QrCode;
+    let scannerIsRunning = false;
+
+    async function openScanner() {
+        if (!window.isSecureContext && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+            alert("Akses kamera hanya diperbolehkan pada koneksi aman (HTTPS) atau Localhost. Silakan gunakan HTTPS.");
+            return;
+        }
+
+        const modal = document.getElementById('scannerModal');
+        modal.classList.remove('hidden');
+        
+        try {
+            const devices = await Html5Qrcode.getCameras();
+            if (!devices || devices.length === 0) {
+                throw new Error("Tidak ada kamera yang ditemukan pada perangkat ini.");
+            }
+
+            html5QrCode = new Html5Qrcode("reader");
+            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+            await html5QrCode.start(
+                { facingMode: "environment" }, 
+                config, 
+                onScanSuccess
+            );
+            scannerIsRunning = true;
+        } catch (err) {
+            console.error(err);
+            alert("Gagal: " + (err.message || "Pastikan memberikan izin kamera."));
+            closeScanner();
+        }
+    }
+
+    async function closeScanner() {
+        document.getElementById('scannerModal').classList.add('hidden');
+        if (html5QrCode && scannerIsRunning) {
+            try {
+                await html5QrCode.stop();
+                html5QrCode.clear();
+                scannerIsRunning = false;
+            } catch (err) {
+                console.error("Error stopping scanner:", err);
+            }
+        }
+    }
+
+    function onScanSuccess(decodedText, decodedResult) {
+        // decodedText can be a full URL (like http://127.0.0.1:8000/master-data/KD...)
+        // or just the KD ID.
+        
+        let targetUrl = "";
+        
+        // If it's already a full URL in the same domain or starts with http
+        if (decodedText.startsWith("http")) {
+            targetUrl = decodedText;
+        } 
+        // If it starts with /master-data/ (relative)
+        else if (decodedText.startsWith("/master-data/")) {
+            targetUrl = decodedText;
+        }
+        // If it's just the ID
+        else if (decodedText.startsWith("KD")) {
+            targetUrl = `/master-data/${decodedText}`;
+        } 
+        else {
+            alert("QR Code tidak valid atau bukan ID Peralatan MONITA.");
+            return;
+        }
+        
+        closeScanner();
+        window.location.href = targetUrl;
+    }
 </script>
 @endsection

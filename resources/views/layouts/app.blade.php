@@ -74,13 +74,13 @@
             
             <!-- Sidebar Toggle (Desktop) -->
             <button @click="sidebarOpen = !sidebarOpen" 
-                    class="absolute -right-4 top-10 w-8 h-8 rounded-full bg-white border border-slate-200 shadow-xl flex items-center justify-center transition-all duration-300 z-50 group hover:scale-110">
+                    class="absolute -right-12 top-3 w-12 h-18 bg-aviation-900 flex items-center justify-center rounded-r-full transition-all duration-300 z-50 group hover:bg-aviation-950 shadow-xl active:scale-95">
                 <!-- Chevron Left (Sidebar Open) -->
-                <svg x-show="sidebarOpen" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#79B933" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                <svg x-show="sidebarOpen" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7 transition-transform group-hover:-translate-x-1">
                     <path d="m15 18-6-6 6-6"/>
                 </svg>
                 <!-- Chevron Right (Sidebar Closed) -->
-                <svg x-show="!sidebarOpen" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#79B933" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                <svg x-show="!sidebarOpen" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7 transition-transform group-hover:translate-x-1">
                     <path d="m9 18 6-6-6-6"/>
                 </svg>
             </button>
@@ -198,6 +198,7 @@
         </main>
     </div>
 
+    <script src="https://unpkg.com/html5-qrcode"></script>
     @yield('js')
     <script>
         // Init Lucide Icons

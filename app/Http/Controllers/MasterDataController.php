@@ -49,7 +49,28 @@ class MasterDataController extends Controller
             'lokasi_id' => $request->lokasi_id,
         ]);
 
-        return redirect()->route('master-data.index')->with('success', 'Data peralatan berhasil ditambahkan dengan ID ' . $newId);
+        return redirect()->route('master-data.show', $newId)->with('success', 'Data peralatan berhasil ditambahkan dengan ID ' . $newId);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+        $data = MasterData::with(['kategori', 'lokasi', 'latestInspeksiDetail'])->findOrFail($id);
+        
+        // Check if there is an active inspection in session
+        $activeInspeksiId = session('active_inspeksi_id');
+        
+        // Smart Redirection: If an inspection is active, go directly to the category form
+        if ($activeInspeksiId) {
+            return redirect()->route('inspeksi.category', [
+                'kategori_id' => $data->kategori_id,
+                'highlight' => $data->id
+            ]);
+        }
+        
+        return view('master.data.show', compact('data', 'activeInspeksiId'));
     }
 
     /**

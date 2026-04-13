@@ -18,7 +18,10 @@
                     </p>
                 </div>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-4">
+                <button onclick="openScanner()" class="btn-hud bg-aviation-success text-white border-none py-2 px-6 h-auto shadow-lg hover:scale-105">
+                    <i data-lucide="scan-line" class="w-4 h-4"></i> Scan QR
+                </button>
                 @php $allDone = $kategories->every(fn($k) => $k->is_complete); @endphp
                 @if($allDone)
                     <span class="px-4 py-2 rounded-xl bg-aviation-success text-white text-[10px] font-black uppercase tracking-widest animate-pulse">
@@ -31,6 +34,8 @@
                 @endif
             </div>
         </div>
+
+        @include('layouts.partials.scanner')
 
         <!-- Category Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

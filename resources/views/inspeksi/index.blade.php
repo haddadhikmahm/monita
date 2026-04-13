@@ -16,11 +16,18 @@
                 <p class="text-[9px] font-bold text-aviation-900 uppercase tracking-[0.3em]">Historical Surveillance Records</p>
             </div>
         </div>
-        <a href="{{ route('inspeksi.create') }}" class="btn-hud btn-hud-primary">
-            <i data-lucide="plus-circle" class="w-4 h-4"></i>
-            <span>Entry Inspeksi Baru</span>
-        </a>
+        <div class="flex items-center gap-4">
+            <button onclick="openScanner()" class="btn-hud bg-aviation-success text-white shadow-2xl hover:scale-105 border-none px-6">
+                <i data-lucide="scan-line" class="w-4 h-4"></i> Scan QR Alat
+            </button>
+            <a href="{{ route('inspeksi.create') }}" class="btn-hud btn-hud-primary">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>Entry Inspeksi Baru</span>
+            </a>
+        </div>
     </div>
+
+    @include('layouts.partials.scanner')
 
     <!-- Advanced Logic Filter Console -->
     <div class="p-8 bg-slate-50/50 border-b border-slate-100">
