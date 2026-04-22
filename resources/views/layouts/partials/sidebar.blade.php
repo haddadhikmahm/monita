@@ -1,5 +1,5 @@
 <!-- Sidebar Header: Brand Identity -->
-<div class="h-24 px-8 flex items-center gap-4 bg-brand-gradient shadow-2xl relative overflow-hidden group">
+<div x-show="sidebarOpen || window.innerWidth >= 1024" class="h-24 px-8 flex items-center gap-4 bg-brand-gradient shadow-2xl relative overflow-hidden group">
     <div class="radar-ping"></div> <!-- Subtle Brand Ping -->
     <div :class="!sidebarOpen ? 'w-10 h-10 rounded-xl -ml-1' : 'w-12 h-12 rounded-2xl'"
          class="bg-white flex items-center justify-center shrink-0 shadow-lg relative z-10 transition-all duration-500">
@@ -14,7 +14,7 @@
 </div>
 
 <!-- Main Navigation Module -->
-<div class="flex-1 px-4 py-8 space-y-8 overflow-y-auto custom-scrollbar">
+<div x-show="sidebarOpen || window.innerWidth >= 1024" class="flex-1 px-4 py-8 space-y-8 overflow-y-auto custom-scrollbar">
     
     <!-- Strategic Overview -->
     <div class="space-y-2">
@@ -74,7 +74,7 @@
 </div>
 
 <!-- Sidebar Footer: Operational Status -->
-<div class="p-6 border-t border-slate-100" x-show="sidebarOpen">
+<!-- <div class="p-6 border-t border-slate-100" x-show="sidebarOpen || (window.innerWidth >= 1024 && sidebarOpen)">
     <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/60">
         <div class="flex items-center gap-3">
             <div class="w-2 h-2 rounded-full bg-aviation-success animate-pulse shadow-[0_0_8px_#79B933]"></div>
@@ -85,4 +85,4 @@
             <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Security Protocol: <span class="text-aviation-success font-black">TLS 1.3</span></p>
         </div>
     </div>
-</div>
+</div> -->

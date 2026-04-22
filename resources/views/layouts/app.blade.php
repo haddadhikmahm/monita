@@ -48,13 +48,7 @@
         <p class="mt-8 font-black text-slate-400 text-[10px] uppercase tracking-[.5em] animate-pulse">Initializing Terminal</p>
     </div>
 
-    <!-- Sidebar Toggle (Mobile) -->
-    <div class="lg:hidden fixed bottom-6 right-6 z-[60]">
-        <button @click="sidebarOpen = !sidebarOpen" class="w-14 h-14 rounded-2xl bg-aviation-900 text-white shadow-2xl flex items-center justify-center border border-white/20 active:scale-90 transition-all group">
-            <i x-show="!sidebarOpen" data-lucide="menu" class="w-6 h-6 text-aviation-success transition-transform group-hover:scale-110"></i>
-            <i x-show="sidebarOpen" data-lucide="x" class="w-6 h-6 text-aviation-success transition-transform group-hover:scale-110"></i>
-        </button>
-    </div>
+
 
     <!-- Main Surveillance Interface -->
     <div class="flex min-h-screen radar-grid relative">
@@ -66,32 +60,30 @@
             :class="{
                 'w-64 lg:w-80 translate-x-0': sidebarOpen,
                 'w-24 translate-x-0': !sidebarOpen && window.innerWidth >= 1024,
-                'w-0 -translate-x-full': !sidebarOpen && window.innerWidth < 1024,
+                'w-0 !border-none !shadow-none': !sidebarOpen && window.innerWidth < 1024,
                 'fixed inset-y-0 left-0 z-50 shadow-2xl': window.innerWidth < 1024
             }"
             class="bg-white border-r border-slate-200 transition-all duration-500 ease-in-out flex flex-col z-40 relative group shrink-0 lg:static">
             @include('layouts.partials.sidebar')
             
-            <!-- Sidebar Toggle (Desktop) -->
-            <button @click="sidebarOpen = !sidebarOpen" 
-                    class="absolute -right-12 top-3 w-12 h-18 bg-aviation-900 flex items-center justify-center rounded-r-full transition-all duration-300 z-50 group hover:bg-aviation-950 shadow-xl active:scale-95">
-                <!-- Chevron Left (Sidebar Open) -->
-                <svg x-show="sidebarOpen" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7 transition-transform group-hover:-translate-x-1">
-                    <path d="m15 18-6-6 6-6"/>
-                </svg>
-                <!-- Chevron Right (Sidebar Closed) -->
-                <svg x-show="!sidebarOpen" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7 transition-transform group-hover:translate-x-1">
-                    <path d="m9 18 6-6-6-6"/>
-                </svg>
-            </button>
+
         </aside>
 
         <!-- Command Area -->
         <main class="flex-1 flex flex-col min-w-0 transition-all duration-500 relative bg-[#F1F5F9]/50">
             
             <!-- Global Terminal Header -->
-            <header class="h-24 glass-hud sticky top-0 z-30 px-6 md:px-12 flex items-center justify-between border-b border-slate-200/60">
-                <div class="flex items-center gap-4 md:gap-8 ml-12 md:ml-24">
+            <header class="h-24 glass-hud sticky top-0 z-30 px-6 md:px-10 flex items-center gap-4 md:gap-8 border-b border-slate-200/60">
+                <!-- Primary Sidebar Toggle -->
+                <button @click="sidebarOpen = !sidebarOpen" 
+                        class="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-aviation-900 hover:bg-aviation-900 hover:text-white hover:border-aviation-900 transition-all shadow-sm active:scale-90 group relative overflow-hidden">
+                    <div class="relative w-6 h-6">
+                        <i x-show="sidebarOpen" data-lucide="panel-left-close" class="absolute inset-0 w-6 h-6 transition-all"></i>
+                        <i x-show="!sidebarOpen" data-lucide="menu" class="absolute inset-0 w-6 h-6 transition-all"></i>
+                    </div>
+                </button>
+
+                <div class="hidden md:flex items-center gap-4 md:gap-8">
                     <!-- Brand Mobile -->
                     <!-- Title HUD -->
                     <div class="flex flex-col shrink-0">
@@ -104,7 +96,7 @@
                 </div>
 
                 <!-- Technical HUD Stats -->
-                <div class="flex items-center gap-4 md:gap-12">
+                <div class="flex items-center gap-4 md:gap-12 ml-auto">
                     <!-- Unit Time -->
                     <div class="hidden sm:flex flex-col items-end shrink-0">
                         <span id="unit-clock" class="text-lg md:text-xl font-bold text-aviation-900 font-mono tracking-tighter">00:00:00</span>
@@ -187,13 +179,13 @@
             <footer class="h-14 px-10 border-t border-slate-200/60 flex items-center justify-between text-[10px] font-black uppercase tracking-[.3em] text-slate-400 bg-white/50 backdrop-blur">
                 <div class="flex items-center gap-6">
                     <span class="text-aviation-900">&copy; {{ date('Y') }} MONITA.AP</span>
-                    <span class="w-[1px] h-4 bg-slate-200"></span>
-                    <span>Sepinggan Airfield Surveillance Terminal</span>
+                    <!-- <span class="w-[1px] h-4 bg-slate-200"></span>
+                    <span>Sepinggan Airfield Surveillance Terminal</span> -->
                 </div>
-                <div class="flex items-center gap-4">
+                <!-- <div class="flex items-center gap-4">
                     <span class="text-aviation-success">System Nominal</span>
                     <span class="text-slate-300">V4.0.0-PRO</span>
-                </div>
+                </div> -->
             </footer>
         </main>
     </div>
