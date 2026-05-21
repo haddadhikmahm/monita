@@ -17,7 +17,13 @@ class InspeksiDetail extends Model
     protected $fillable = [
         'id', 'inspeksi_id', 'data_id', 'jumlah',
         'kondisi_struktur', 'kondisi_permukaan', 'foto',
-        'upaya', 'tindak_lanjut', 'keterangan'
+        'upaya', 'tindak_lanjut', 'keterangan',
+        'is_repaired', 'tgl_perbaikan', 'kondisi_perbaikan', 'foto_perbaikan', 'keterangan_perbaikan'
+    ];
+
+    protected $casts = [
+        'is_repaired' => 'boolean',
+        'tgl_perbaikan' => 'datetime',
     ];
 
     public function inspeksi()

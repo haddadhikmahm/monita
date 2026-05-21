@@ -75,7 +75,12 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $detail->masterData->nama }}</td>
                         <td>{{ $detail->jumlah }}</td>
-                        <td style="text-align: center;">{{ $detail->kondisi_struktur }}</td>
+                        <td style="text-align: center;">
+                            {{ $detail->kondisi_struktur }}
+                            @if($detail->kondisi_struktur == 'Rusak' && $detail->is_repaired)
+                                <br><small style="color: green; font-size: 8pt;">(Sudah Diperbaiki)</small>
+                            @endif
+                        </td>
                         <td style="text-align: center;">
                             @if($detail->foto)
                                 <img src="{{ public_path('images/kondisi/' . $detail->foto) }}" width="60" style="border: 1px solid #ccc;">

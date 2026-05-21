@@ -67,11 +67,52 @@ class MaintenanceController extends Controller
             $query->where('data_id', $request->data_id);
         }
 
+        // Filter by Status Perbaikan
+        if ($request->filled('status_perbaikan')) {
+            if ($request->status_perbaikan == 'pending') {
+                $query->where('is_repaired', false);
+            } elseif ($request->status_perbaikan == 'repaired') {
+                $query->where('is_repaired', true);
+            }
+        }
+
         $maintenanceItems = $query->orderBy('created_at', 'desc')->get();
         $lokasis = LokasiInspeksi::all();
         $kategories = KategoriInspeksi::all();
         $all_alat = MasterData::all();
 
         return view('maintenance.index', compact('maintenanceItems', 'lokasis', 'kategories', 'all_alat'));
+    }
+
+    /**
+     * Store or update repair log for a maintenance item.
+     */
+    public function repair(Request $request, $id)
+    {
+        $request->validate([
+            'kondisi_perbaikan' => 'required|in:Baik,Tidak Baik',
+            'keterangan_perbaikan' => 'required|string',
+            'tgl_perbaikan' => 'required|date',
+            'foto_perbaikan' => 'nullable|image|max:2048',
+        ]);
+
+        $detail = InspeksiDetail::findOrFail($id);
+
+        $photoName = $detail->foto_perbaikan;
+        if ($request->hasFile('foto_perbaikan')) {
+            $file = $request->file('foto_perbaikan');
+            $photoName = 'repair_' . time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('images/kondisi'), $photoName);
+        }
+
+        $detail->update([
+            'is_repaired' => $request->kondisi_perbaikan == 'Baik',
+            'tgl_perbaikan' => $request->tgl_perbaikan,
+            'kondisi_perbaikan' => $request->kondisi_perbaikan,
+            'keterangan_perbaikan' => $request->keterangan_perbaikan,
+            'foto_perbaikan' => $photoName,
+        ]);
+
+        return redirect()->route('maintenance.index')->with('success', 'Data Perbaikan Berhasil Disimpan.');
     }
 }

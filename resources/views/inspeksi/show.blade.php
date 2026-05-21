@@ -136,6 +136,11 @@
                                         <span class="w-1.5 h-1.5 rounded-full {{ $detail->kondisi_struktur == 'Baik' ? 'bg-aviation-success' : 'bg-rose-500' }} animate-pulse"></span>
                                         {{ $detail->kondisi_struktur }}
                                     </span>
+                                    @if($detail->is_repaired)
+                                        <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 text-[8px] font-black uppercase tracking-widest flex items-center justify-center gap-1 mx-auto mt-1.5 w-fit">
+                                            <i data-lucide="check" class="w-2.5 h-2.5"></i> Sudah Diperbaiki
+                                        </span>
+                                    @endif
                                 </td>
                                 <td>
                                     @if($detail->foto)

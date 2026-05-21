@@ -39,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Maintenance
     Route::get('/maintenance', [App\Http\Controllers\MaintenanceController::class, 'index'])->name('maintenance.index');
+    Route::post('/maintenance/{id}/repair', [App\Http\Controllers\MaintenanceController::class, 'repair'])->name('maintenance.repair');
 
     // Profile Management
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');

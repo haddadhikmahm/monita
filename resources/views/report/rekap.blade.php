@@ -47,16 +47,25 @@
                     <td>
                         @php
                             $rusak = $i->details->where('kondisi_struktur', 'Rusak')->count();
+                            $repaired = $i->details->where('kondisi_struktur', 'Rusak')->where('is_repaired', true)->count();
+                            $pending = $rusak - $repaired;
                             $baik = $i->details->where('kondisi_struktur', 'Baik')->count();
                         @endphp
                         <div class="flex items-center gap-2">
-                            <span class="px-2 py-0.5 rounded-full bg-aviation-success/10 text-aviation-success border border-aviation-success/20 text-[9px] font-black uppercase tracking-widest">
+                            <span class="px-2 py-0.5 rounded-full bg-aviation-success/10 text-aviation-success border border-aviation-success/20 text-[9px] font-black uppercase tracking-widest" title="Kondisi Baik">
                                 {{ $baik }} OK
                             </span>
                             @if($rusak > 0)
-                                <span class="px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-500 border border-rose-500/20 text-[9px] font-black uppercase tracking-widest">
-                                    {{ $rusak }} ERR
-                                </span>
+                                @if($pending > 0)
+                                    <span class="px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-500 border border-rose-500/20 text-[9px] font-black uppercase tracking-widest" title="Butuh Perbaikan">
+                                        {{ $pending }} ERR
+                                    </span>
+                                @endif
+                                @if($repaired > 0)
+                                    <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 text-[9px] font-black uppercase tracking-widest" title="Sudah Diperbaiki">
+                                        {{ $repaired }} FIX
+                                    </span>
+                                @endif
                             @endif
                         </div>
                     </td>
