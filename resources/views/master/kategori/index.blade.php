@@ -38,13 +38,13 @@
                     <td>
                         <div class="flex items-center gap-3">
                             <a href="{{ route('kategori.edit', $k->id) }}" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-500 border border-blue-500/20 hover:bg-blue-500 hover:text-white transition-all text-[10px] font-bold uppercase tracking-widest">
-                                <i data-lucide="edit-2" class="w-3 h-3"></i> Sync
+                                <i data-lucide="edit-2" class="w-3 h-3"></i> Edit
                             </a>
                             <form action="{{ route('kategori.destroy', $k->id) }}" method="POST" class="inline" onsubmit="return confirm('Hapus kategori ini?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-500/10 text-rose-500 border border-rose-500/20 hover:bg-rose-500 hover:text-white transition-all text-[10px] font-bold uppercase tracking-widest">
-                                    <i data-lucide="trash" class="w-3 h-3"></i> Purge
+                                    <i data-lucide="trash" class="w-3 h-3"></i> Delete
                                 </button>
                             </form>
                         </div>

@@ -36,7 +36,7 @@
                         <span class="text-xs font-bold text-aviation-900">{{ $inspeksi->lokasi->nama }}</span>
                     </div>
                     <div class="flex justify-between items-center py-3 border-b border-slate-50">
-                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Atmosfer</span>
+                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Cuaca</span>
                         <span class="px-2 py-1 rounded bg-sky-500/10 text-sky-600 text-[9px] font-black uppercase tracking-widest border border-sky-500/20">
                             {{ $inspeksi->cuaca }}
                         </span>
@@ -129,7 +129,7 @@
                             @foreach($inspeksi->details as $index => $detail)
                             <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100">
                                 <td class="font-mono text-[10px] text-slate-400 text-center">#{{ str_pad($index + 1, 3, '0', STR_PAD_LEFT) }}</td>
-                                <td class="font-bold text-slate-800 text-sm">{{ $detail->masterData->nama }}</td>
+                                <td class="font-bold text-slate-800 text-sm">{{ $detail->masterData?->nama ?? 'Unknown Equipment' }}</td>
                                 <td class="text-center font-bold text-aviation-900">{{ $detail->jumlah }}</td>
                                 <td>
                                     <span class="px-2.5 py-1 rounded-full {{ $detail->kondisi_struktur == 'Baik' ? 'bg-aviation-success/10 text-aviation-success border border-aviation-success/20' : 'bg-rose-500/10 text-rose-500 border border-rose-500/20' }} text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 mx-auto">

@@ -20,7 +20,20 @@ class InspeksiController extends Controller
     public function index(Request $request)
     {
         $inspeksis = Inspeksi::filter($request->all())
-            ->with(['lokasi', 'petugas1'])
+            ->with([
+                'lokasi',
+                'petugas1',
+                'details' => function($q) use ($request) {
+                    if ($request->filled('kategori_id')) {
+                        $q->whereHas('masterData', function($mq) use ($request) {
+                            $mq->where('kategori_id', $request->kategori_id);
+                        });
+                    }
+                    if ($request->filled('data_id')) {
+                        $q->where('data_id', $request->data_id);
+                    }
+                }
+            ])
             ->orderBy('tanggal', 'desc')
             ->get();
 
@@ -145,16 +158,29 @@ class InspeksiController extends Controller
                         $file->move(public_path('images/kondisi'), $photoName);
                     }
 
-                    InspeksiDetail::updateOrCreate(
-                        ['inspeksi_id' => $activeId, 'data_id' => $dataId],
-                        [
-                            'id' => $itemData['detail_id'] ?? 'DTI' . rand(11111, 99999),
+                    // Check if a detail record already exists to preserve the ID, or create a new one
+                    $detail = InspeksiDetail::where('inspeksi_id', $activeId)
+                        ->where('data_id', $dataId)
+                        ->first();
+
+                    if ($detail) {
+                        $detail->update([
                             'jumlah' => $itemData['jml'],
                             'kondisi_struktur' => $itemData['kondisi'] ?? 'Baik',
                             'keterangan' => $itemData['keterangan'] ?? null,
                             'foto' => $photoName,
-                        ]
-                    );
+                        ]);
+                    } else {
+                        InspeksiDetail::create([
+                            'id' => 'DTI' . rand(11111, 99999),
+                            'inspeksi_id' => $activeId,
+                            'data_id' => $dataId,
+                            'jumlah' => $itemData['jml'],
+                            'kondisi_struktur' => $itemData['kondisi'] ?? 'Baik',
+                            'keterangan' => $itemData['keterangan'] ?? null,
+                            'foto' => $photoName,
+                        ]);
+                    }
                 }
             }
             DB::commit();

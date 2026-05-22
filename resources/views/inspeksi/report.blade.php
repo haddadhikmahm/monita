@@ -27,7 +27,11 @@
     <div class="header">
         <table width="100%">
             <tr>
-                <td width="30%"><img src="{{ public_path('images/logo.png') }}" class="logo"></td>
+                <td width="30%">
+                    @if(file_exists(public_path('images/logo.png')))
+                        <img src="{{ public_path('images/logo.png') }}" class="logo">
+                    @endif
+                </td>
                 <td width="70%" class="title">
                     <h3>INSPEKSI FASILITAS AIRPORT TECHNOLOGY</h3>
                     <p>DI BANDARA INTERNASIONAL SAMS SEPINGGAN BALIKPAPAN</p>
@@ -72,9 +76,9 @@
                 </tr>
                 @foreach($details as $index => $detail)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $detail->masterData->nama }}</td>
-                        <td>{{ $detail->jumlah }}</td>
+                         <td>{{ $loop->iteration }}</td>
+                         <td>{{ $detail->masterData?->nama ?? 'Unknown Equipment' }}</td>
+                         <td>{{ $detail->jumlah }}</td>
                         <td style="text-align: center;">
                             {{ $detail->kondisi_struktur }}
                             @if($detail->kondisi_struktur == 'Rusak' && $detail->is_repaired)
@@ -106,7 +110,11 @@
             <td class="signature-box">
                 Diketahui:<br>
                 AIRPORT TECHNOLOGY MANAGER<br><br>
-                <img src="{{ public_path('images/ttdhp.png') }}" width="120"><br>
+                @if(file_exists(public_path('images/ttdhp.png')))
+                    <img src="{{ public_path('images/ttdhp.png') }}" width="120"><br>
+                @else
+                    <br><br><br>
+                @endif
                 ( HERMAN PRAYITNO )
             </td>
         </tr>

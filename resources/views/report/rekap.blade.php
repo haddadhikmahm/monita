@@ -27,7 +27,7 @@
                     <th>Timestamp</th>
                     <th>Oper. Day</th>
                     <th>Node Lokasi</th>
-                    <th>Atmosfer</th>
+                    <th>Cuaca</th>
                     <th>Status Matriks Alat</th>
                     <th width="10%">Analisis</th>
                 </tr>

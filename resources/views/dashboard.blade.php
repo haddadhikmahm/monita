@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pusat Kendali - Monita HUD')
+@section('title', 'Dashboard - Monita HUD')
 @section('header', 'Surveillance Control Center')
 
 @section('content')
@@ -23,12 +23,18 @@
             </div>
         </div>
         <div class="relative z-10 flex flex-wrap justify-center gap-4">
-            <button onclick="openScanner()" class="btn-hud bg-aviation-success text-white shadow-2xl hover:scale-105 border-none">
-                <i data-lucide="scan-line" class="w-4 h-4"></i> Scan QR Alat
-            </button>
-            <a href="{{ route('inspeksi.index') }}" class="btn-hud bg-white text-aviation-900 shadow-2xl hover:scale-105">
-                <i data-lucide="radar" class="w-4 h-4"></i> Mulai Inspeksi
-            </a>
+            @if(Auth::user()->role != 'pimpinan')
+                <button onclick="openScanner()" class="btn-hud bg-aviation-success text-white shadow-2xl hover:scale-105 border-none">
+                    <i data-lucide="scan-line" class="w-4 h-4"></i> Scan QR Alat
+                </button>
+                <a href="{{ route('inspeksi.create') }}" class="btn-hud bg-white text-aviation-900 shadow-2xl hover:scale-105">
+                    <i data-lucide="radar" class="w-4 h-4"></i> Mulai Inspeksi
+                </a>
+            @else
+                <a href="{{ route('inspeksi.index') }}" class="btn-hud bg-white text-aviation-900 shadow-2xl hover:scale-105">
+                    <i data-lucide="clipboard-list" class="w-4 h-4"></i> Laporan Inspeksi
+                </a>
+            @endif
             <a href="{{ route('master-data.index') }}" class="btn-hud border-2 border-white/20 text-white hover:bg-white/10 hover:border-white">
                 <i data-lucide="database" class="w-4 h-4"></i> Database Alat
             </a>
@@ -221,9 +227,9 @@
     new Chart(document.getElementById('conditionChart'), {
         type: 'doughnut',
         data: {
-            labels: ['Baik', 'Rusak Ringan', 'Rusak Berat'],
+            labels: ['Baik', 'Sedang', 'Rusak'],
             datasets: [{
-                data: [{{ $baik }}, {{ $ringan }}, {{ $berat }}],
+                data: [{{ $baik }}, {{ $sedang }}, {{ $rusak }}],
                 backgroundColor: [brandColors.green, brandColors.orange, brandColors.coral],
                 borderColor: '#ffffff',
                 borderWidth: 8,
@@ -308,79 +314,5 @@
     });
 
     lucide.createIcons();
-
-    let html5QrCode;
-    let scannerIsRunning = false;
-
-    async function openScanner() {
-        if (!window.isSecureContext && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-            alert("Akses kamera hanya diperbolehkan pada koneksi aman (HTTPS) atau Localhost. Silakan gunakan HTTPS.");
-            return;
-        }
-
-        const modal = document.getElementById('scannerModal');
-        modal.classList.remove('hidden');
-        
-        try {
-            const devices = await Html5Qrcode.getCameras();
-            if (!devices || devices.length === 0) {
-                throw new Error("Tidak ada kamera yang ditemukan pada perangkat ini.");
-            }
-
-            html5QrCode = new Html5Qrcode("reader");
-            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-
-            await html5QrCode.start(
-                { facingMode: "environment" }, 
-                config, 
-                onScanSuccess
-            );
-            scannerIsRunning = true;
-        } catch (err) {
-            console.error(err);
-            alert("Gagal: " + (err.message || "Pastikan memberikan izin kamera."));
-            closeScanner();
-        }
-    }
-
-    async function closeScanner() {
-        document.getElementById('scannerModal').classList.add('hidden');
-        if (html5QrCode && scannerIsRunning) {
-            try {
-                await html5QrCode.stop();
-                html5QrCode.clear();
-                scannerIsRunning = false;
-            } catch (err) {
-                console.error("Error stopping scanner:", err);
-            }
-        }
-    }
-
-    function onScanSuccess(decodedText, decodedResult) {
-        // decodedText can be a full URL (like http://127.0.0.1:8000/master-data/KD...)
-        // or just the KD ID.
-        
-        let targetUrl = "";
-        
-        // If it's already a full URL in the same domain or starts with http
-        if (decodedText.startsWith("http")) {
-            targetUrl = decodedText;
-        } 
-        // If it starts with /master-data/ (relative)
-        else if (decodedText.startsWith("/master-data/")) {
-            targetUrl = decodedText;
-        }
-        // If it's just the ID
-        else if (decodedText.startsWith("KD")) {
-            targetUrl = `/master-data/${decodedText}`;
-        } 
-        else {
-            alert("QR Code tidak valid atau bukan ID Peralatan MONITA.");
-            return;
-        }
-        
-        closeScanner();
-        window.location.href = targetUrl;
-    }
 </script>
 @endsection

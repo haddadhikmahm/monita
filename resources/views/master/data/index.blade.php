@@ -15,10 +15,12 @@
                 <p class="text-[9px] font-bold text-aviation-900 uppercase tracking-[0.3em]">Technical Asset Surveillance Registry</p>
             </div>
         </div>
+        @if(Auth::user()->role == 'admin')
         <a href="{{ route('master-data.create') }}" class="btn-hud btn-hud-primary">
             <i data-lucide="plus-circle" class="w-4 h-4"></i>
             <span>Tambah Artifact Baru</span>
         </a>
+        @endif
     </div>
 
     <div class="p-8 overflow-x-auto">
@@ -53,16 +55,18 @@
                             <a href="{{ route('master-data.show', $d->id) }}" class="p-2 rounded-xl bg-aviation-900/10 text-aviation-900 border border-aviation-900/20 hover:bg-aviation-900 hover:text-white transition-all shadow-lg hover:shadow-aviation-900/20" title="View Status">
                                 <i data-lucide="eye" class="w-4 h-4"></i>
                             </a>
+                            @if(Auth::user()->role == 'admin')
                             <a href="{{ route('master-data.edit', $d->id) }}" class="p-2 rounded-xl bg-aviation-accent/10 text-aviation-accent border border-aviation-accent/20 hover:bg-aviation-accent hover:text-white transition-all shadow-lg hover:shadow-aviation-accent/20" title="Edit Data">
                                 <i data-lucide="edit-3" class="w-4 h-4"></i>
                             </a>
                             <form action="{{ route('master-data.destroy', $d->id) }}" method="POST" class="inline" onsubmit="return confirm('Hapus data ini?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="p-2 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20 hover:bg-rose-500 hover:text-white transition-all shadow-lg hover:shadow-rose-500/20" title="Hapus Data">
+                                <button type="submit" class="p-2 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20 hover:bg-rose-50 hover:text-white transition-all shadow-lg hover:shadow-rose-500/20" title="Hapus Data">
                                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                                 </button>
                             </form>
+                            @endif
                         </div>
                     </td>
                 </tr>

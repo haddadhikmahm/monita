@@ -168,6 +168,43 @@
                         </div>
                     @endif
 
+                    @if(session('error'))
+                        <div class="fade-up mb-8 flex items-center gap-6 p-6 bg-white border border-rose-500/20 text-rose-500 rounded-3xl shadow-xl shadow-rose-500/5" x-data="{ show: true }" x-show="show">
+                            <div class="w-14 h-14 rounded-2xl bg-rose-500/10 flex items-center justify-center shrink-0 border border-rose-500/30 shadow-lg shadow-rose-500/10">
+                                <i data-lucide="alert-octagon" class="w-7 h-7"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-black uppercase tracking-widest text-xs text-rose-600">System Alert / Error</h4>
+                                <p class="text-slate-500 font-bold mt-1 text-sm">{{ session('error') }}</p>
+                            </div>
+                            <button @click="show = false" class="text-slate-400 hover:text-rose-500 transition-colors">
+                                <i data-lucide="x" class="w-6 h-6"></i>
+                            </button>
+                        </div>
+                    @endif
+
+                    @if(isset($errors) && $errors->any())
+                        <div class="fade-up mb-8 flex flex-col gap-4 p-6 bg-white border border-rose-500/20 text-rose-500 rounded-3xl shadow-xl shadow-rose-500/5" x-data="{ show: true }" x-show="show">
+                            <div class="flex items-center gap-6">
+                                <div class="w-14 h-14 rounded-2xl bg-rose-500/10 flex items-center justify-center shrink-0 border border-rose-500/30 shadow-lg shadow-rose-500/10">
+                                    <i data-lucide="alert-octagon" class="w-7 h-7"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-black uppercase tracking-widest text-xs text-rose-600">Validation Failures</h4>
+                                    <p class="text-slate-500 font-bold mt-1 text-sm">Please correct the entries in the form:</p>
+                                </div>
+                                <button @click="show = false" class="text-slate-400 hover:text-rose-500 transition-colors">
+                                    <i data-lucide="x" class="w-6 h-6"></i>
+                                </button>
+                            </div>
+                            <ul class="list-disc pl-20 text-xs font-semibold text-slate-600 space-y-1">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <!-- CORE CONTENT DEPLOY -->
                     <div class="fade-up delay-200">
                         @yield('content')

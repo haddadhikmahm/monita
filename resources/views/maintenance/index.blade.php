@@ -203,7 +203,7 @@
                         </div>
                     </td>
                     <td>
-                        @if(Auth::check())
+                        @if(Auth::user()->role != 'pimpinan')
                             <button type="button" 
                                     onclick="openRepairModal({{ json_encode([
                                         'id' => $item->id,
@@ -224,7 +224,7 @@
                                 <span class="text-[10px] font-black uppercase">Perbaikan</span>
                             </button>
                         @else
-                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider italic">No Clearance</span>
+                            <span class="text-xs text-slate-400 italic font-semibold block text-center">View Only</span>
                         @endif
                     </td>
                 </tr>
@@ -396,7 +396,7 @@
         
         // Form action
         const form = document.getElementById('repairForm');
-        form.action = `/maintenance/${data.id}/repair`;
+        form.action = "{{ route('maintenance.repair', ':id') }}".replace(':id', data.id);
         
         // Fill repair fields if exists
         form.querySelector(`input[name="kondisi_perbaikan"][value="Baik"]`).checked = data.is_repaired || (data.kondisi_perbaikan === 'Baik');

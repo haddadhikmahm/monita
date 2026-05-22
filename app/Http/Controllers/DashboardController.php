@@ -33,13 +33,13 @@ class DashboardController extends Controller
             ->get();
 
         $baik = 0;
-        $ringan = 0;
-        $berat = 0;
+        $sedang = 0;
+        $rusak = 0;
 
         foreach ($latestDetails as $detail) {
             if ($detail->kondisi_struktur == 'Baik') $baik = $detail->total;
-            elseif ($detail->kondisi_struktur == 'Rusak Ringan') $ringan = $detail->total;
-            elseif ($detail->kondisi_struktur == 'Rusak Berat') $berat = $detail->total;
+            elseif ($detail->kondisi_struktur == 'Sedang') $sedang = $detail->total;
+            elseif ($detail->kondisi_struktur == 'Rusak') $rusak = $detail->total;
         }
 
         // New Chart Data: Equipment per Category
@@ -49,14 +49,34 @@ class DashboardController extends Controller
         $locations = \App\Models\LokasiInspeksi::withCount('masterDatas')->take(10)->get();
 
         // New Chart Data: Monthly Inspection Trends (Last 6 months)
-        $monthlyTrends = Inspeksi::select(
-                DB::raw('MONTHNAME(created_at) as month'), 
-                DB::raw('count(*) as total')
-            )
-            ->where('created_at', '>=', now()->subMonths(6))
-            ->groupBy('month', DB::raw('MONTH(created_at)'))
-            ->orderBy(DB::raw('MONTH(created_at)'))
-            ->get();
+        if (DB::connection()->getDriverName() === 'sqlite') {
+            $monthlyTrends = Inspeksi::select(
+                    DB::raw("strftime('%m', created_at) as month"), 
+                    DB::raw('count(*) as total')
+                )
+                ->where('created_at', '>=', now()->subMonths(6))
+                ->groupBy('month')
+                ->orderBy('month')
+                ->get();
+            
+            $monthNames = [
+                '01' => 'January', '02' => 'February', '03' => 'March', '04' => 'April',
+                '05' => 'May', '06' => 'June', '07' => 'July', '08' => 'August',
+                '09' => 'September', '10' => 'October', '11' => 'November', '12' => 'December'
+            ];
+            foreach ($monthlyTrends as $trend) {
+                $trend->month = $monthNames[$trend->month] ?? $trend->month;
+            }
+        } else {
+            $monthlyTrends = Inspeksi::select(
+                    DB::raw('MONTHNAME(created_at) as month'), 
+                    DB::raw('count(*) as total')
+                )
+                ->where('created_at', '>=', now()->subMonths(6))
+                ->groupBy('month', DB::raw('MONTH(created_at)'))
+                ->orderBy(DB::raw('MONTH(created_at)'))
+                ->get();
+        }
 
         return view('dashboard', compact(
             'countData', 
@@ -64,8 +84,8 @@ class DashboardController extends Controller
             'countUser', 
             'countInspeksi', 
             'baik', 
-            'ringan', 
-            'berat',
+            'sedang', 
+            'rusak',
             'categories',
             'locations',
             'monthlyTrends'

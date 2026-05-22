@@ -18,21 +18,18 @@
                     </p>
                 </div>
             </div>
-            <div class="flex items-center gap-4">
-                <button onclick="openScanner()" class="btn-hud bg-aviation-success text-white border-none py-2 px-6 h-auto shadow-lg hover:scale-105">
-                    <i data-lucide="scan-line" class="w-4 h-4"></i> Scan QR
-                </button>
-                @php $allDone = $kategories->every(fn($k) => $k->is_complete); @endphp
-                @if($allDone)
-                    <span class="px-4 py-2 rounded-xl bg-aviation-success text-white text-[10px] font-black uppercase tracking-widest animate-pulse">
-                        READY FOR SUBMISSION
-                    </span>
-                @else
-                    <span class="px-4 py-2 rounded-xl bg-slate-200 text-slate-500 text-[10px] font-black uppercase tracking-widest">
-                        PENDING DATA ENTRY
-                    </span>
-                @endif
-            </div>
+             <div class="flex items-center gap-4">
+                 <button onclick="openScanner()" class="btn-hud bg-aviation-success text-white border-none py-2 px-6 h-auto shadow-lg hover:scale-105">
+                     <i data-lucide="scan-line" class="w-4 h-4"></i> Scan QR
+                 </button>
+                 @php
+                     $completedCount = $kategories->filter(fn($k) => $k->is_complete)->count();
+                     $totalCount = $kategories->count();
+                 @endphp
+                 <span class="px-4 py-2 rounded-xl bg-aviation-900/10 text-aviation-900 border border-aviation-900/20 text-[10px] font-black uppercase tracking-widest">
+                     Progress: {{ $completedCount }} / {{ $totalCount }} Kategori
+                 </span>
+             </div>
         </div>
 
         @include('layouts.partials.scanner')
@@ -64,15 +61,15 @@
             @endforeach
         </div>
 
-        <!-- Action Footer -->
-        <div class="flex justify-between items-center mt-12 bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
-            <form action="{{ route('inspeksi.finish') }}" method="POST">
-                @csrf
-                <button type="submit" class="btn-hud btn-hud-primary h-14 px-10 {{ $allDone ? '' : 'opacity-50 cursor-not-allowed' }}" {{ $allDone ? '' : 'disabled' }}>
-                    <i data-lucide="send" class="w-5 h-5"></i>
-                    <span>Finalize & Submit Report</span>
-                </button>
-            </form>
+         <!-- Action Footer -->
+         <div class="flex justify-between items-center mt-12 bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+             <form action="{{ route('inspeksi.finish') }}" method="POST">
+                 @csrf
+                 <button type="submit" class="btn-hud btn-hud-primary h-14 px-10">
+                     <i data-lucide="send" class="w-5 h-5"></i>
+                     <span>Finalize & Submit Report</span>
+                 </button>
+             </form>
 
             <a href="{{ route('inspeksi.index') }}" class="text-[10px] font-black text-rose-500 uppercase tracking-[0.3em] hover:underline">
                 Discard Session [Emergency Abort]

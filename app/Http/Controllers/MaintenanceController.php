@@ -105,9 +105,11 @@ class MaintenanceController extends Controller
             $file->move(public_path('images/kondisi'), $photoName);
         }
 
+        $tglPerbaikan = $request->tgl_perbaikan ? Carbon::parse($request->tgl_perbaikan) : null;
+
         $detail->update([
             'is_repaired' => $request->kondisi_perbaikan == 'Baik',
-            'tgl_perbaikan' => $request->tgl_perbaikan,
+            'tgl_perbaikan' => $tglPerbaikan,
             'kondisi_perbaikan' => $request->kondisi_perbaikan,
             'keterangan_perbaikan' => $request->keterangan_perbaikan,
             'foto_perbaikan' => $photoName,

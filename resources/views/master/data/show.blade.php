@@ -140,16 +140,18 @@
                 @endif
                 
                 <div class="w-full pt-6 border-t border-slate-100 space-y-4">
-                    @if($activeInspeksiId)
-                        <a href="{{ route('inspeksi.category', ['kategori_id' => $data->kategori_id, 'highlight' => $data->id]) }}" class="btn-hud bg-aviation-success text-white w-full h-14 hover:scale-[1.02] shadow-xl shadow-aviation-success/20">
-                            <i data-lucide="edit-3" class="w-5 h-5"></i>
-                            Mulai Update Inspeksi
-                        </a>
-                    @else
-                        <a href="{{ route('inspeksi.create') }}" class="btn-hud bg-aviation-900 text-white w-full h-14 hover:scale-[1.02] shadow-xl shadow-aviation-900/20">
-                            <i data-lucide="radar" class="w-5 h-5"></i>
-                            Inisiasi Quick Inspection
-                        </a>
+                    @if(Auth::user()->role != 'pimpinan')
+                        @if($activeInspeksiId)
+                            <a href="{{ route('inspeksi.category', ['kategori_id' => $data->kategori_id, 'highlight' => $data->id]) }}" class="btn-hud bg-aviation-success text-white w-full h-14 hover:scale-[1.02] shadow-xl shadow-aviation-success/20">
+                                <i data-lucide="edit-3" class="w-5 h-5"></i>
+                                Mulai Update Inspeksi
+                            </a>
+                        @else
+                            <a href="{{ route('inspeksi.create') }}" class="btn-hud bg-aviation-900 text-white w-full h-14 hover:scale-[1.02] shadow-xl shadow-aviation-900/20">
+                                <i data-lucide="radar" class="w-5 h-5"></i>
+                                Inisiasi Quick Inspection
+                            </a>
+                        @endif
                     @endif
                     <a href="{{ route('master-data.index') }}" class="btn-hud btn-hud-outline w-full h-12">
                         <i data-lucide="arrow-left" class="w-4 h-4"></i>

@@ -17,16 +17,20 @@
             </div>
         </div>
         <div class="flex items-center gap-4">
+            @if(Auth::user()->role != 'pimpinan')
             <button onclick="openScanner()" class="btn-hud bg-aviation-success text-white shadow-2xl hover:scale-105 border-none px-6">
                 <i data-lucide="scan-line" class="w-4 h-4"></i> Scan QR Alat
             </button>
-            <a href="{{ route('inspeksi.pdf_filtered', request()->all()) }}" class="btn-hud bg-rose-600 text-white shadow-2xl hover:scale-105 border-none px-6" target="_blank">
+            @endif
+            <a id="btnPrintFiltered" href="{{ route('inspeksi.pdf_filtered', request()->all()) }}" class="btn-hud bg-rose-600 text-white shadow-2xl hover:scale-105 border-none px-6" target="_blank">
                 <i data-lucide="printer" class="w-4 h-4"></i> Cetak Laporan Filtered
             </a>
+            @if(Auth::user()->role != 'pimpinan')
             <a href="{{ route('inspeksi.create') }}" class="btn-hud btn-hud-primary">
                 <i data-lucide="plus-circle" class="w-4 h-4"></i>
                 <span>Entry Inspeksi Baru</span>
             </a>
+            @endif
         </div>
     </div>
 
@@ -34,7 +38,7 @@
 
     <!-- Advanced Logic Filter Console -->
     <div class="p-8 bg-slate-50/50 border-b border-slate-100">
-        <form action="{{ route('inspeksi.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <form id="filterForm" action="{{ route('inspeksi.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="form-hud-group mb-0">
                 <label class="form-hud-label !text-[8px]">Time Horizon</label>
                 <select name="period" class="form-hud-select !py-2 !text-xs" onchange="this.form.submit()">
@@ -103,7 +107,7 @@
                     <th>Timestamp Data</th>
                     <th>Node Lokasi</th>
                     <th>Operator Unit I</th>
-                    <th>Kondisi Atmosfer</th>
+                    <th>Cuaca</th>
                     <th width="15%">Aksi Protokol</th>
                 </tr>
             </thead>
@@ -157,6 +161,29 @@
             "drawCallback": function() {
                 lucide.createIcons();
             }
+        });
+
+        // Dynamically build PDF print URL with current filter values
+        $('#btnPrintFiltered').on('click', function(e) {
+            e.preventDefault();
+            
+            const form = $('#filterForm');
+            if (form.length === 0) return;
+            
+            const params = {};
+            form.find('select, input').each(function() {
+                const name = $(this).attr('name');
+                const val = $(this).val();
+                if (name && val !== '') {
+                    params[name] = val;
+                }
+            });
+            
+            const queryString = $.param(params);
+            const baseUrl = "{{ route('inspeksi.pdf_filtered') }}";
+            const finalUrl = baseUrl + (queryString ? '?' + queryString : '');
+            
+            window.open(finalUrl, '_blank');
         });
     });
 </script>

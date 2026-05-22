@@ -113,9 +113,9 @@
                 </div>
 
                 <div class="pt-4">
-                    <button type="submit" class="btn-ap-primary w-full py-5 rounded-3xl text-white font-black text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3">
+                    <button type="submit" class="btn-ap-primary w-full py-5 rounded-3xl text-white font-black text-sm uppercase tracking-[.2em] flex items-center justify-center gap-3">
                         <i data-lucide="shield-check" class="w-5 h-5"></i>
-                        Verify & Authorize
+                        Login
                     </button>
                 </div>
 

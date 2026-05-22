@@ -37,7 +37,7 @@
 
                 <div class="space-y-6">
                     <div class="form-hud-group">
-                        <label class="form-hud-label">Kondisi Atmosfer</label>
+                        <label class="form-hud-label">Cuaca</label>
                         <select name="cuaca" class="form-hud-select">
                             <option value="Cerah">Cerah</option>
                             <option value="Berawan">Berawan</option>

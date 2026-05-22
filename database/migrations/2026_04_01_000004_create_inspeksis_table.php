@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('id')->primary(); // Legacy ID (IDIxxx)
             $table->string('hari');
             $table->date('tanggal');
-            $table->enum('cuaca', ['Cerah', 'Mendung', 'Hujan'])->nullable();
+            $table->enum('cuaca', ['Cerah', 'Berawan', 'Mendung', 'Hujan'])->nullable();
             $table->enum('w1', ['Y', 'N'])->default('N');
             $table->enum('w2', ['Y', 'N'])->default('N');
             $table->string('lokasi_id');

@@ -9,7 +9,7 @@
     </div>
     <div class="flex flex-col relative z-10" x-show="sidebarOpen">
         <h1 class="text-white font-black text-xs tracking-[.4em] uppercase leading-none">Angkasa Pura</h1>
-        <p class="text-aviation-success font-black text-[10px] uppercase tracking-[.2em] mt-1.5 opacity-80">AIRPORTS</p>
+        <p class="text-aviation-success font-black text-[10px] uppercase tracking-[.2em] mt-1.5 opacity-80">Indonesia</p>
     </div>
 </div>
 
@@ -21,7 +21,7 @@
         <p class="px-6 text-[9px] font-black text-slate-400 uppercase tracking-[.4em] mb-4" x-show="sidebarOpen">Strategic Operations</p>
         <a href="{{ route('dashboard') }}" class="nav-instrument {{ Request::is('dashboard') ? 'nav-instrument-active' : '' }} group">
             <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-            <span x-show="sidebarOpen" class="tracking-widest uppercase text-[10px] font-black">Pusat Kendali</span>
+            <span x-show="sidebarOpen" class="tracking-widest uppercase text-[10px] font-black">dashboard</span>
         </a>
     </div>
 

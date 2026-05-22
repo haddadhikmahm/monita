@@ -12,58 +12,74 @@ class ReportController extends Controller
     public function downloadFilteredPdf(Request $request)
     {
         $inspeksis = Inspeksi::filter($request->all())
-            ->with(['lokasi', 'petugas1', 'details.masterData'])
+            ->with([
+                'lokasi',
+                'petugas1',
+                'details' => function($q) use ($request) {
+                    if ($request->filled('kategori_id')) {
+                        $q->whereHas('masterData', function($mq) use ($request) {
+                            $mq->where('kategori_id', $request->kategori_id);
+                        });
+                    }
+                    if ($request->filled('data_id')) {
+                        $q->where('data_id', $request->data_id);
+                    }
+                    $q->with(['masterData.kategori']);
+                }
+            ])
             ->orderBy('tanggal', 'desc')
             ->get();
 
-        // Get filter labels for display in the PDF header
-        $activeFilters = [];
-        
+        // Calculate explicit start and end dates for the period string
+        $dateFrom = null;
+        $dateTo = null;
+
         if ($request->filled('period')) {
-            $periods = [
-                'today' => 'Harian [Today]',
-                'this_week' => 'Mingguan [This Week]',
-                'this_month' => 'Bulanan [This Month]',
-                'this_year' => 'Tahunan [This Year]'
-            ];
-            $activeFilters['Periode'] = $periods[$request->period] ?? $request->period;
-        }
-
-        if ($request->filled('date_from') || $request->filled('date_to')) {
-            $dateRange = '';
-            if ($request->filled('date_from')) {
-                $dateRange .= \Carbon\Carbon::parse($request->date_from)->format('d/m/Y');
-            } else {
-                $dateRange .= 'Awal';
+            switch ($request->period) {
+                case 'today':
+                    $dateFrom = \Carbon\Carbon::today();
+                    $dateTo = \Carbon\Carbon::today();
+                    break;
+                case 'this_week':
+                    $dateFrom = \Carbon\Carbon::now()->startOfWeek();
+                    $dateTo = \Carbon\Carbon::now()->endOfWeek();
+                    break;
+                case 'this_month':
+                    $dateFrom = \Carbon\Carbon::now()->startOfMonth();
+                    $dateTo = \Carbon\Carbon::now()->endOfMonth();
+                    break;
+                case 'this_year':
+                    $dateFrom = \Carbon\Carbon::now()->startOfYear();
+                    $dateTo = \Carbon\Carbon::now()->endOfYear();
+                    break;
             }
-            $dateRange .= ' s/d ';
-            if ($request->filled('date_to')) {
-                $dateRange .= \Carbon\Carbon::parse($request->date_to)->format('d/m/Y');
-            } else {
-                $dateRange .= 'Akhir';
-            }
-            $activeFilters['Rentang Tanggal'] = $dateRange;
         }
 
-        if ($request->filled('lokasi_id')) {
-            $lokasi = \App\Models\LokasiInspeksi::find($request->lokasi_id);
-            $activeFilters['Lokasi'] = $lokasi ? $lokasi->nama : 'N/A';
+        if ($request->filled('date_from')) {
+            $dateFrom = \Carbon\Carbon::parse($request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $dateTo = \Carbon\Carbon::parse($request->date_to);
         }
 
-        if ($request->filled('kategori_id')) {
-            $kategori = KategoriInspeksi::find($request->kategori_id);
-            $activeFilters['Kategori Alat'] = $kategori ? $kategori->nama : 'N/A';
+        // If no dates are set, get min/max dates from filtered results
+        if (!$dateFrom && $inspeksis->isNotEmpty()) {
+            $dateFrom = $inspeksis->min('tanggal');
+        }
+        if (!$dateTo && $inspeksis->isNotEmpty()) {
+            $dateTo = $inspeksis->max('tanggal');
         }
 
-        if ($request->filled('data_id')) {
-            $alat = \App\Models\MasterData::find($request->data_id);
-            $activeFilters['Alat Spesifik'] = $alat ? $alat->nama : 'N/A';
-        }
+        // If still empty, default to current day
+        if (!$dateFrom) $dateFrom = \Carbon\Carbon::today();
+        if (!$dateTo) $dateTo = \Carbon\Carbon::today();
+
+        $periodeString = $dateFrom->format('d/m/Y') . ' - ' . $dateTo->format('d/m/Y');
 
         $pdf = Pdf::loadView('inspeksi.report_filtered', [
             'inspeksis' => $inspeksis,
-            'activeFilters' => $activeFilters
-        ])->setPaper('a4', 'landscape');
+            'periodeString' => $periodeString
+        ])->setPaper('a4', 'portrait'); // portrait matches regular table layout best! Let's check how the user wants it, portrait or landscape. The user's mock is a standard vertical layout, so portrait is great! Let's set to portrait.
 
         return $pdf->stream('Laporan_Rekap_Inspeksi_' . date('Ymd_His') . '.pdf');
     }
@@ -75,7 +91,7 @@ class ReportController extends Controller
 
         // Group details by category for the report
         $detailsByKategori = $inspeksi->details->groupBy(function($detail) {
-            return $detail->masterData->kategori->nama;
+            return $detail->masterData?->kategori?->nama ?? 'Lain-lain';
         });
 
         $pdf = Pdf::loadView('inspeksi.report', [
