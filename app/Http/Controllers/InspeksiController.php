@@ -19,47 +19,11 @@ class InspeksiController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Inspeksi::with(['lokasi', 'petugas1']);
+        $inspeksis = Inspeksi::filter($request->all())
+            ->with(['lokasi', 'petugas1'])
+            ->orderBy('tanggal', 'desc')
+            ->get();
 
-        // Filtering Logic
-        if ($request->filled('period')) {
-            switch ($request->period) {
-                case 'today':
-                    $query->whereDate('tanggal', Carbon::today());
-                    break;
-                case 'this_week':
-                    $query->whereBetween('tanggal', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
-                    break;
-                case 'this_month':
-                    $query->whereMonth('tanggal', Carbon::now()->month)->whereYear('tanggal', Carbon::now()->year);
-                    break;
-                case 'this_year':
-                    $query->whereYear('tanggal', Carbon::now()->year);
-                    break;
-            }
-        }
-
-        if ($request->filled('date_from') && $request->filled('date_to')) {
-            $query->whereBetween('tanggal', [$request->date_from, $request->date_to]);
-        }
-
-        if ($request->filled('lokasi_id')) {
-            $query->where('lokasi_id', $request->lokasi_id);
-        }
-
-        if ($request->filled('kategori_id')) {
-            $query->whereHas('details.masterData', function($q) use ($request) {
-                $q->where('kategori_id', $request->kategori_id);
-            });
-        }
-
-        if ($request->filled('data_id')) {
-            $query->whereHas('details', function($q) use ($request) {
-                $q->where('data_id', $request->data_id);
-            });
-        }
-
-        $inspeksis = $query->orderBy('tanggal', 'desc')->get();
         $lokasis = LokasiInspeksi::all();
         $kategories = KategoriInspeksi::all();
         $all_alat = MasterData::all();

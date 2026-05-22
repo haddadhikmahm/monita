@@ -47,6 +47,52 @@ class Inspeksi extends Model
         return $this->belongsTo(User::class, 'petugas4_id');
     }
 
+    public function scopeFilter($query, array $filters)
+    {
+        if (!empty($filters['period'])) {
+            switch ($filters['period']) {
+                case 'today':
+                    $query->whereDate('tanggal', \Carbon\Carbon::today());
+                    break;
+                case 'this_week':
+                    $query->whereBetween('tanggal', [\Carbon\Carbon::now()->startOfWeek(), \Carbon\Carbon::now()->endOfWeek()]);
+                    break;
+                case 'this_month':
+                    $query->whereMonth('tanggal', \Carbon\Carbon::now()->month)->whereYear('tanggal', \Carbon\Carbon::now()->year);
+                    break;
+                case 'this_year':
+                    $query->whereYear('tanggal', \Carbon\Carbon::now()->year);
+                    break;
+            }
+        }
+
+        if (!empty($filters['date_from'])) {
+            $query->where('tanggal', '>=', $filters['date_from']);
+        }
+
+        if (!empty($filters['date_to'])) {
+            $query->where('tanggal', '<=', $filters['date_to']);
+        }
+
+        if (!empty($filters['lokasi_id'])) {
+            $query->where('lokasi_id', $filters['lokasi_id']);
+        }
+
+        if (!empty($filters['kategori_id'])) {
+            $query->whereHas('details.masterData', function($q) use ($filters) {
+                $q->where('kategori_id', $filters['kategori_id']);
+            });
+        }
+
+        if (!empty($filters['data_id'])) {
+            $query->whereHas('details', function($q) use ($filters) {
+                $q->where('data_id', $filters['data_id']);
+            });
+        }
+
+        return $query;
+    }
+
     public function details()
     {
         return $this->hasMany(InspeksiDetail::class, 'inspeksi_id');

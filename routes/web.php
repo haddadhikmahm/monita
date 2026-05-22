@@ -34,6 +34,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('inspeksi/category/{kategori_id}', [InspeksiController::class, 'categoryForm'])->name('inspeksi.category');
     Route::post('inspeksi/category/{kategori_id}', [InspeksiController::class, 'saveCategory'])->name('inspeksi.save_category');
     Route::post('inspeksi/finish', [InspeksiController::class, 'finish'])->name('inspeksi.finish');
+    Route::get('inspeksi/export/pdf', [\App\Http\Controllers\ReportController::class, 'downloadFilteredPdf'])->name('inspeksi.pdf_filtered');
     Route::resource('inspeksi', InspeksiController::class);
     Route::get('inspeksi/{id}/pdf', [\App\Http\Controllers\ReportController::class, 'downloadPdf'])->name('inspeksi.pdf');
 

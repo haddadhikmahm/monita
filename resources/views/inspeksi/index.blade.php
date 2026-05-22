@@ -20,6 +20,9 @@
             <button onclick="openScanner()" class="btn-hud bg-aviation-success text-white shadow-2xl hover:scale-105 border-none px-6">
                 <i data-lucide="scan-line" class="w-4 h-4"></i> Scan QR Alat
             </button>
+            <a href="{{ route('inspeksi.pdf_filtered', request()->all()) }}" class="btn-hud bg-rose-600 text-white shadow-2xl hover:scale-105 border-none px-6" target="_blank">
+                <i data-lucide="printer" class="w-4 h-4"></i> Cetak Laporan Filtered
+            </a>
             <a href="{{ route('inspeksi.create') }}" class="btn-hud btn-hud-primary">
                 <i data-lucide="plus-circle" class="w-4 h-4"></i>
                 <span>Entry Inspeksi Baru</span>
@@ -34,7 +37,7 @@
         <form action="{{ route('inspeksi.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="form-hud-group mb-0">
                 <label class="form-hud-label !text-[8px]">Time Horizon</label>
-                <select name="period" class="form-hud-select !py-2 !text-xs">
+                <select name="period" class="form-hud-select !py-2 !text-xs" onchange="this.form.submit()">
                     <option value="">- All Time -</option>
                     <option value="today" {{ request('period') == 'today' ? 'selected' : '' }}>Harian [Today]</option>
                     <option value="this_week" {{ request('period') == 'this_week' ? 'selected' : '' }}>Mingguan [This Week]</option>
