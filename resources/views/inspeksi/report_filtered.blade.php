@@ -51,8 +51,12 @@
             $totalBaikQty += $baikQty;
             $totalRusakQty += $rusakQty;
 
-            // Get unique, non-empty keterangan values
-            $keterangan = $detailsGroup->pluck('keterangan')->filter()->unique()->implode(', ');
+            // Get unique, non-empty keterangan values only from broken items
+            $keterangan = $detailsGroup->where('kondisi_struktur', 'Rusak')
+                ->pluck('keterangan')
+                ->filter()
+                ->unique()
+                ->implode(', ');
 
             $equipmentSummary[] = [
                 'nama' => $alatName,
