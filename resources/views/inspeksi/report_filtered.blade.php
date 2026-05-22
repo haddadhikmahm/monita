@@ -51,10 +51,14 @@
             $totalBaikQty += $baikQty;
             $totalRusakQty += $rusakQty;
 
+            // Get unique, non-empty keterangan values
+            $keterangan = $detailsGroup->pluck('keterangan')->filter()->unique()->implode(', ');
+
             $equipmentSummary[] = [
                 'nama' => $alatName,
                 'baik' => $baikQty,
                 'rusak' => $rusakQty,
+                'keterangan' => $keterangan,
             ];
         }
     @endphp
@@ -84,13 +88,14 @@
     <table class="data-table">
         <thead>
             <tr>
-                <th rowspan="2" width="8%" style="text-align: center; vertical-align: middle;">NO</th>
+                <th rowspan="2" width="6%" style="text-align: center; vertical-align: middle;">NO</th>
                 <th rowspan="2" style="vertical-align: middle; text-align: left;">NAMA PERALATAN</th>
                 <th colspan="2" style="text-align: center;">KONDISI</th>
+                <th rowspan="2" width="25%" style="vertical-align: middle; text-align: left;">KETERANGAN</th>
             </tr>
             <tr>
-                <th width="20%" style="text-align: center;">BAIK</th>
-                <th width="20%" style="text-align: center;">BURUK</th>
+                <th width="12%" style="text-align: center;">BAIK</th>
+                <th width="12%" style="text-align: center;">RUSAK</th>
             </tr>
         </thead>
         <tbody>
@@ -100,10 +105,11 @@
                     <td style="font-weight: bold; color: #0f172a; text-align: left;">{{ $eq['nama'] }}</td>
                     <td style="text-align: center; color: #16a34a; font-weight: bold;">{{ $eq['baik'] }}</td>
                     <td style="text-align: center; color: #dc2626; font-weight: bold;">{{ $eq['rusak'] }}</td>
+                    <td style="font-size: 8.5pt; color: #475569; text-align: left; vertical-align: middle;">{{ $eq['keterangan'] ?: '-' }}</td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4" style="text-align: center; color: #64748b; font-style: italic; padding: 25px;">
+                    <td colspan="5" style="text-align: center; color: #64748b; font-style: italic; padding: 25px;">
                         Tidak ada data peralatan yang terinspeksi untuk periode ini.
                     </td>
                 </tr>
@@ -113,6 +119,7 @@
                     <td colspan="2" style="text-align: left; font-weight: 900; text-transform: uppercase; padding-left: 10px;">JUMLAH PERALATAN</td>
                     <td style="text-align: center; color: #16a34a; font-weight: 900; font-size: 10pt;">{{ $totalBaikQty }}</td>
                     <td style="text-align: center; color: #dc2626; font-weight: 900; font-size: 10pt;">{{ $totalRusakQty }}</td>
+                    <td style="background-color: #f1f5f9;"></td>
                 </tr>
             @endif
         </tbody>
