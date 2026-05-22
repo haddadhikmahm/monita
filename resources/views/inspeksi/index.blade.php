@@ -77,7 +77,16 @@
                     @endforeach
                 </select>
             </div>
-            <div class="form-hud-group mb-0 md:col-span-2">
+            <div class="form-hud-group mb-0">
+                <label class="form-hud-label !text-[8px]">Sub Category</label>
+                <select name="sub_kategori" class="form-hud-select !py-2 !text-xs" onchange="this.form.submit()">
+                    <option value="">- All Sub Categories -</option>
+                    @foreach($sub_kategories as $sub)
+                        <option value="{{ $sub }}" {{ request('sub_kategori') == $sub ? 'selected' : '' }}>{{ $sub }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-hud-group mb-0">
                 <label class="form-hud-label !text-[8px]">Specific Equipment [Alat]</label>
                 <select name="data_id" class="form-hud-select !py-2 !text-xs" onchange="this.form.submit()">
                     <option value="">- All Equipment -</option>

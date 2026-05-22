@@ -84,6 +84,12 @@ class Inspeksi extends Model
             });
         }
 
+        if (!empty($filters['sub_kategori'])) {
+            $query->whereHas('details.masterData', function($q) use ($filters) {
+                $q->where('sub_kategori', $filters['sub_kategori']);
+            });
+        }
+
         if (!empty($filters['data_id'])) {
             $query->whereHas('details', function($q) use ($filters) {
                 $q->where('data_id', $filters['data_id']);

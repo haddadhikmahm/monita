@@ -40,8 +40,9 @@ class InspeksiController extends Controller
         $lokasis = LokasiInspeksi::all();
         $kategories = KategoriInspeksi::all();
         $all_alat = MasterData::all();
+        $sub_kategories = MasterData::whereNotNull('sub_kategori')->where('sub_kategori', '!=', '')->distinct()->pluck('sub_kategori');
 
-        return view('inspeksi.index', compact('inspeksis', 'lokasis', 'kategories', 'all_alat'));
+        return view('inspeksi.index', compact('inspeksis', 'lokasis', 'kategories', 'all_alat', 'sub_kategories'));
     }
 
     /**

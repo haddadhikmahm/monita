@@ -35,6 +35,9 @@
                             <h3 class="text-3xl font-black text-aviation-900 tracking-tight leading-none mb-2 uppercase">{{ $data->nama }}</h3>
                             <div class="flex flex-wrap gap-2">
                                 <span class="px-3 py-1 rounded-lg bg-aviation-900/10 text-aviation-900 text-[10px] font-black uppercase tracking-widest">{{ $data->kategori->nama }}</span>
+                                @if($data->sub_kategori)
+                                    <span class="px-3 py-1 rounded-lg bg-teal-500/10 text-teal-600 text-[10px] font-black uppercase tracking-widest">{{ $data->sub_kategori }}</span>
+                                @endif
                                 <span class="px-3 py-1 rounded-lg bg-amber-500/10 text-amber-500 text-[10px] font-black uppercase tracking-widest">{{ $data->lokasi->nama }}</span>
                             </div>
                         </div>

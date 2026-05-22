@@ -14,7 +14,7 @@ class MasterData extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['id', 'nama', 'kategori_id', 'lokasi_id'];
+    protected $fillable = ['id', 'nama', 'kategori_id', 'sub_kategori', 'lokasi_id'];
 
     public function kategori()
     {

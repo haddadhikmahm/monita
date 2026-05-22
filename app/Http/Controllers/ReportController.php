@@ -21,6 +21,11 @@ class ReportController extends Controller
                             $mq->where('kategori_id', $request->kategori_id);
                         });
                     }
+                    if ($request->filled('sub_kategori')) {
+                        $q->whereHas('masterData', function($mq) use ($request) {
+                            $mq->where('sub_kategori', $request->sub_kategori);
+                        });
+                    }
                     if ($request->filled('data_id')) {
                         $q->where('data_id', $request->data_id);
                     }

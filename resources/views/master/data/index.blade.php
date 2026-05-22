@@ -40,9 +40,16 @@
                     <td class="font-mono text-aviation-900 text-xs">#{{ str_pad($d->id, 5, '0', STR_PAD_LEFT) }}</td>
                     <td class="font-bold text-slate-800 tracking-wide">{{ $d->nama }}</td>
                     <td>
-                        <span class="px-2 py-1 rounded bg-amber-500/10 text-amber-500 text-[10px] font-bold uppercase tracking-wider border border-amber-500/20">
-                            {{ $d->kategori->nama }}
-                        </span>
+                        <div class="flex flex-col gap-1">
+                            <span class="px-2 py-1 rounded bg-amber-500/10 text-amber-500 text-[10px] font-bold uppercase tracking-wider border border-amber-500/20 w-fit">
+                                {{ $d->kategori->nama }}
+                            </span>
+                            @if($d->sub_kategori)
+                                <span class="px-2 py-0.5 rounded bg-teal-500/10 text-teal-600 text-[9px] font-bold uppercase tracking-wider border border-teal-500/20 w-fit">
+                                    {{ $d->sub_kategori }}
+                                </span>
+                            @endif
+                        </div>
                     </td>
                     <td>
                         <div class="flex items-center gap-2">

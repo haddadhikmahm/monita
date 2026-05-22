@@ -30,7 +30,7 @@
                     @enderror
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <!-- Kategori -->
                     <div class="form-hud-group">
                         <label for="kategori_id" class="form-hud-label">Klasifikasi Unit</label>
@@ -41,6 +41,17 @@
                             @endforeach
                         </select>
                         @error('kategori_id')
+                            <p class="mt-2 text-[10px] font-bold text-aviation-danger uppercase tracking-wider">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Sub Kategori -->
+                    <div class="form-hud-group">
+                        <label for="sub_kategori" class="form-hud-label">Sub Kategori Klasifikasi</label>
+                        <input type="text" name="sub_kategori" id="sub_kategori" class="form-hud-input" 
+                               placeholder="Masukkan sub kategori (Contoh: Airside, Landside)" 
+                               value="{{ old('sub_kategori') }}">
+                        @error('sub_kategori')
                             <p class="mt-2 text-[10px] font-bold text-aviation-danger uppercase tracking-wider">{{ $message }}</p>
                         @enderror
                     </div>

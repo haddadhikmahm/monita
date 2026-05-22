@@ -34,6 +34,7 @@ class MasterDataController extends Controller
             'nama' => 'required',
             'kategori_id' => 'required',
             'lokasi_id' => 'required',
+            'sub_kategori' => 'nullable|string',
         ]);
 
         // Auto generate ID (KD + 8 random digits, or KD + increment if preferred)
@@ -46,6 +47,7 @@ class MasterDataController extends Controller
             'id' => $newId,
             'nama' => $request->nama,
             'kategori_id' => $request->kategori_id,
+            'sub_kategori' => $request->sub_kategori,
             'lokasi_id' => $request->lokasi_id,
         ]);
 
@@ -93,10 +95,11 @@ class MasterDataController extends Controller
             'nama' => 'required',
             'kategori_id' => 'required',
             'lokasi_id' => 'required',
+            'sub_kategori' => 'nullable|string',
         ]);
 
         $data = MasterData::findOrFail($id);
-        $data->update($request->only('nama', 'kategori_id', 'lokasi_id'));
+        $data->update($request->only('nama', 'kategori_id', 'sub_kategori', 'lokasi_id'));
 
         return redirect()->route('master-data.index')->with('success', 'Data peralatan berhasil diperbarui.');
     }
