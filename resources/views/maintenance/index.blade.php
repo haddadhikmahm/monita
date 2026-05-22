@@ -4,6 +4,13 @@
 @section('header', 'Maintenance surveillance Terminal')
 
 @section('content')
+@if(session('success'))
+    <div class="mb-6 p-4 bg-aviation-success/10 border border-aviation-success/20 rounded-2xl flex items-center gap-3 text-aviation-success fade-up">
+        <i data-lucide="check-circle" class="w-5 h-5 shrink-0"></i>
+        <span class="text-xs font-bold">{{ session('success') }}</span>
+    </div>
+@endif
+
 <div class="card-instrument fade-up">
     <!-- HUD Header with Strategic Summary -->
     <div class="p-8 border-b border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">
@@ -198,18 +205,20 @@
                     <td>
                         @if(Auth::check())
                             <button type="button" 
-                                    data-id="{{ $item->id }}"
-                                    data-nama-alat="{{ $item->masterData->nama }}"
-                                    data-kategori="{{ $item->masterData->kategori->nama ?? 'N/A' }}"
-                                    data-lokasi="{{ $item->inspeksi->lokasi->nama ?? 'N/A' }}"
-                                    data-keterangan-rusak="{{ $item->keterangan ?? '-' }}"
-                                    data-foto-rusak="{{ $item->foto ? asset('images/kondisi/' . $item->foto) : '' }}"
-                                    data-is-repaired="{{ $item->is_repaired ? '1' : '0' }}"
-                                    data-kondisi-perbaikan="{{ $item->kondisi_perbaikan ?? '' }}"
-                                    data-keterangan-perbaikan="{{ $item->keterangan_perbaikan ?? '' }}"
-                                    data-foto-perbaikan="{{ $item->foto_perbaikan ? asset('images/kondisi/' . $item->foto_perbaikan) : '' }}"
-                                    data-tgl-perbaikan="{{ $item->tgl_perbaikan ? $item->tgl_perbaikan->format('Y-m-d\TH:i') : now()->format('Y-m-d\TH:i') }}"
-                                    class="btn-repair p-2 rounded-xl bg-amber-500/10 text-amber-600 border border-amber-500/20 hover:bg-amber-500 hover:text-white transition-all shadow-lg hover:shadow-amber-500/20 flex items-center justify-center gap-2 group w-full"
+                                    onclick="openRepairModal({{ json_encode([
+                                        'id' => $item->id,
+                                        'nama_alat' => $item->masterData->nama,
+                                        'kategori' => $item->masterData->kategori->nama ?? 'N/A',
+                                        'lokasi' => $item->inspeksi->lokasi->nama ?? 'N/A',
+                                        'keterangan_rusak' => $item->keterangan ?? '-',
+                                        'foto_rusak' => $item->foto ? asset('images/kondisi/' . $item->foto) : null,
+                                        'is_repaired' => $item->is_repaired,
+                                        'kondisi_perbaikan' => $item->kondisi_perbaikan,
+                                        'keterangan_perbaikan' => $item->keterangan_perbaikan,
+                                        'foto_perbaikan' => $item->foto_perbaikan ? asset('images/kondisi/' . $item->foto_perbaikan) : null,
+                                        'tgl_perbaikan' => $item->tgl_perbaikan ? $item->tgl_perbaikan->format('Y-m-d\TH:i') : now()->format('Y-m-d\TH:i')
+                                    ]) }})"
+                                    class="p-2 rounded-xl bg-amber-500/10 text-amber-600 border border-amber-500/20 hover:bg-amber-500 hover:text-white transition-all shadow-lg hover:shadow-amber-500/20 flex items-center justify-center gap-2 group w-full"
                                     title="Log Perbaikan">
                                 <i data-lucide="wrench" class="w-4 h-4"></i>
                                 <span class="text-[10px] font-black uppercase">Perbaikan</span>
@@ -364,25 +373,6 @@
             "drawCallback": function() {
                 lucide.createIcons();
             }
-        });
-
-        // Dynamic event binding for Repair button to handle DataTables pagination/filtering cleanly
-        $(document).on('click', '.btn-repair', function() {
-            const btn = $(this);
-            const data = {
-                id: btn.data('id'),
-                nama_alat: btn.data('nama-alat'),
-                kategori: btn.data('kategori'),
-                lokasi: btn.data('lokasi'),
-                keterangan_rusak: btn.data('keterangan-rusak'),
-                foto_rusak: btn.data('foto-rusak'),
-                is_repaired: btn.data('is-repaired') == '1',
-                kondisi_perbaikan: btn.data('kondisi-perbaikan'),
-                keterangan_perbaikan: btn.data('keterangan-perbaikan'),
-                foto_perbaikan: btn.data('foto-perbaikan'),
-                tgl_perbaikan: btn.data('tgl-perbaikan')
-            };
-            openRepairModal(data);
         });
     });
 
